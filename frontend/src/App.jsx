@@ -6,7 +6,7 @@ function App() {
         <div>
             <h1>Japan Inside 🇯🇵</h1>
             <ArticleList />
-            <RecetteList />
+         
         </div>
     );
 }
