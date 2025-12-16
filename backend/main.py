@@ -29,7 +29,9 @@ def get_db():
 @app.get('/api/hello')
 def hello_world():
     return {"message": "Hello World"}
-
+@app.get('/')
+def hello_world():
+    return {}, 200
 @app.get("/api/articles", response_model=list[schemas.Article])
 def read_articles(db: Session = Depends(get_db)):
     return crud.get_articles(db)
