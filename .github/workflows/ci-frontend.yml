@@ -16,3 +16,4 @@ jobs:
           npm ci
           npm run lint --if-present
           npm run build
+          npm test
