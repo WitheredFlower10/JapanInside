@@ -114,7 +114,7 @@
                         ${data.attractions.map(attr => `<li>${attr}</li>`).join('')}
                     </ul>
                     
-                    <button class="action-btn" onclick="window.open('/ville/${nom.toLowerCase()}', '_blank')">
+                    <button class="action-btn" onclick="window.open('/ville/${nom.toLowerCase()}')">
                         <i class="fas fa-external-link-alt"></i> Voir la page complète
                     </button>
                 `;
@@ -135,10 +135,6 @@
             });
     }
     
-    // Fermer le panneau d'information
-    function closeInfoPanel() {
-        document.getElementById("infoPanel").style.display = "none";
-    }
     
     // Points pour l'itinéraire
     var points = [];

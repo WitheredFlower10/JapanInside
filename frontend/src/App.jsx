@@ -1,12 +1,21 @@
 
+
+import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
+import Home from "./Home";
+import VilleDetail from "./VilleDetail";
+
 function App() {
-    return (
-        <iframe
-            src="/public/index.html"
-            title="Carte du Japon"
-            style={{ width:"100vw", height:"100vh", border:"none" }}
-        />
-    );
+  return (
+    <Router>
+    
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ville/:villeP" element={<VilleDetail />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
+
+
