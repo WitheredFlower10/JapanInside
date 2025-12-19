@@ -6,9 +6,6 @@ const VilleDetail = () => {
     const [ville, setVille] = useState(null);
 
 
-
-
-
   useEffect(() => {
     fetch('/api/villes/' + villeP)
       .then(res => {

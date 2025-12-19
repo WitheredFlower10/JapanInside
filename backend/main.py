@@ -5,8 +5,15 @@ from database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from fastapi.responses import HTMLResponse, JSONResponse
-from utils.carte_gen import generate_map_html, villes_data, itineraire, generate_japan_map
+
 from fastapi.staticfiles import StaticFiles
+import json
+
+with open("villes.json", "r", encoding="utf-8") as f:
+    villes_data = json.load(f)
+  
+itineraire = ["Tokyo", "Hakone", "Kyoto", "Nara", "Osaka", "Hiroshima", "Tokyo"]
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Japan Inside API")
@@ -86,18 +93,6 @@ async def get_itineraire_complet():
             for i, ville in enumerate(itineraire[:-1])  # Exclure le dernier Tokyo
         ]
     }
-
-# Route pour générer une nouvelle carte
-@app.post("/api/carte/generate")
-async def generate_new_map():
-    """Génère une nouvelle carte et la sauvegarde"""
-    try:
-        output_path = "static/carte_japon_latest.html"
-        generate_japan_map(output_path)
-        return {"message": "Carte générée avec succès", "path": output_path}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur: {str(e)}")
-
 
 # Routes existantes de votre API
 @app.get('/api/hello')
