@@ -2,10 +2,13 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./mapStyle.css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [ville, setVille] = useState(null);
   const [villes, setVilles] = useState([]);
+  const [showSpecialitesModal, setShowSpecialitesModal] = useState(false);
+
   const mapRef = useRef(null);
 
   const getVilles = async () => {
@@ -33,7 +36,7 @@ const Home = () => {
       });
   }, []);
 useEffect(() => {
-  if (mapRef.current) return; // only initialize once
+  if (mapRef.current) return; 
 
   const map = L.map("map").setView([36.2048, 138.2529], 6);
   mapRef.current = map;
@@ -47,9 +50,8 @@ useEffect(() => {
   map.setMaxBounds([[30, 128], [46, 146]]);
   map.on("click", () => setVille(null));
 
-  // Wrap async code in IIFE
   (async () => {
-    const villesData = await getVilles(); // getVilles still sets state internally
+    const villesData = await getVilles(); 
     const points = [];
 
     villesData.forEach((v) => {
@@ -81,14 +83,97 @@ useEffect(() => {
     }
   })();
 }, [onVilleClick]);
-
+const [specialitesJP, setSpecialitesJP] = useState([])
+const getSpecialitesJP = async () => {
+    try {
+      const res = await fetch(
+        "https://www.themealdb.com/api/json/v1/1/filter.php?a=japanese"
+      );
+      const data = await res.json();
+      console.log(data.meals)
+      setSpecialitesJP(data.meals || []);
+    } catch (err) {
+      console.error("Erreur chargement spécialités :", err);
+    }
+  };
+useEffect(() => {
+  getSpecialitesJP()
+}, [])
 
   return (
     <>
+
+
+{showSpecialitesModal && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <div className="modal-header">
+        <h3>Spécialités Japonaises</h3>
+        <span
+          className="close-btn"
+          onClick={() => setShowSpecialitesModal(false)}
+        >
+          ×
+        </span>
+      </div>
+      <ul className="specialites-list">
+        {specialitesJP.map((meal) => (
+          <li key={meal.idMeal}>
+            <img
+              src={meal.strMealThumb}
+              alt={meal.strMeal}
+              className="meal-thumb"
+            />{" "}
+            {meal.strMeal}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+)}
+
+
+
+        <div style={{
+        position: "absolute",
+        top: 10,
+        right: 10
+      }}>
+
+
+        <button
+  className="specialites-btn"
+  onClick={() => setShowSpecialitesModal(true)}
+>
+  Spécialités Japonaises
+</button>
+        <Link
+          to={'/admin'}
+          className="admin-btn"
+          style={{
+            position: "fixed",
+            top:"15px",
+            right:"25px",
+            zIndex:999,
+            background: "#667eea",
+            color: "white",
+            padding: "8px 12px",
+            borderRadius: "6px",
+            textDecoration: "none",
+            fontWeight: "bold",
+            boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
+          }}
+        >
+          Administration
+        </Link>
+      </div>
       <div className="map-title">
         <h1>🇯🇵 Japan Inside - Itinéraire au Japon</h1>
         <p>{villes.map((v) => v.nom).join(" → ")}</p>
       </div>
+   
+  
+
       <div id="map" style={{ width: "100vw", height: "100vh" }}></div>
 
       {ville && (

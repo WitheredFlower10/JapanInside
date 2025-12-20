@@ -92,3 +92,7 @@ class VilleOut(BaseModel):
     attractions: List[AttractionOut] = []
     recettes: List[RecetteOut] = []
     model_config = ConfigDict(from_attributes=True)
+
+class VilleOrder(BaseModel):
+    id: int
+    position: int
