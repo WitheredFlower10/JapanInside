@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Optional, Dict, Any
 
 
@@ -13,12 +13,6 @@ class VilleBase(BaseModel):
     climat: Optional[str] = None
  
 
-
-class Ville(VilleBase):
-    id: int
-    model_config = {"from_attributes": True}
-
-
 class AttractionBase(BaseModel):
     nom: str
     description: Optional[str] = None
@@ -26,19 +20,22 @@ class AttractionBase(BaseModel):
     latitude: Optional[float] = None
     ville_id: int
 
-class Attraction(AttractionBase):
-    id: int
-    model_config = {"from_attributes": True}
-
 class RecetteBase(BaseModel):
     nom: str
     description: Optional[str] = None
     ingredients: Optional[str] = None
+    
+class Ville(VilleBase):
+    id: int
+    model_config = ConfigDict(from_attributes=True)
+
+class Attraction(AttractionBase):
+    id: int
+    model_config = ConfigDict(from_attributes=True)
 
 class Recette(RecetteBase):
     id: int
-    model_config = {"from_attributes": True}
-
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AttractionCreate(BaseModel):
@@ -67,23 +64,20 @@ class VilleCreate(BaseModel):
 
 
 
-
 class AttractionOut(BaseModel):
     id: int
     nom: str
     description: Optional[str]
     longitude: Optional[float]
     latitude: Optional[float]
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class RecetteOut(BaseModel):
     id: int
     nom: str
     description: Optional[str]
     ingredients: Optional[str]
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class VilleOut(BaseModel):
     id: int
@@ -97,5 +91,4 @@ class VilleOut(BaseModel):
     climat: Optional[str]
     attractions: List[AttractionOut] = []
     recettes: List[RecetteOut] = []
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

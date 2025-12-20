@@ -20,7 +20,6 @@ itineraire = ["Tokyo", "Hakone", "Kyoto", "Nara", "Osaka", "Hiroshima", "Tokyo"]
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Japan Inside API")
-app.mount("/static", StaticFiles(directory="utils"), name="static")
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",

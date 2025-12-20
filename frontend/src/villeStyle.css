@@ -1,6 +1,6 @@
  a {
     text-decoration:none;
-    
+
  }
  
  body {
@@ -85,3 +85,36 @@
                     font-size: 2rem;
                 }
             }
+            .attractions-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.attraction-item {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.attraction-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+.attraction-name {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.attraction-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4a5568;
+  line-height: 1.4;
+}
