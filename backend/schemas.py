@@ -22,6 +22,8 @@ class Ville(VilleBase):
 class AttractionBase(BaseModel):
     nom: str
     description: Optional[str] = None
+    longitude: Optional[float] = None
+    latitude: Optional[float] = None
     ville_id: int
 
 class Attraction(AttractionBase):
@@ -42,6 +44,8 @@ class Recette(RecetteBase):
 class AttractionCreate(BaseModel):
     nom: str
     description: Optional[str] = None
+    longitude: Optional[float] = None
+    latitude: Optional[float] = None
 
 class RecetteCreate(BaseModel):
     nom: str
@@ -68,6 +72,8 @@ class AttractionOut(BaseModel):
     id: int
     nom: str
     description: Optional[str]
+    longitude: Optional[float]
+    latitude: Optional[float]
     class Config:
         orm_mode = True
 

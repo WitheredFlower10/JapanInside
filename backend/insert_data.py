@@ -29,9 +29,12 @@ def execute():
 
             # Ajouter les attractions
             for attr_data in ville_data.get("attractions", []):
+                print(attr_data)
                 attraction = models.Attraction(
                     nom=attr_data["nom"],
                     description=attr_data.get("description"),
+                    longitude=attr_data.get("longitude"),
+                    latitude=attr_data.get("latitude"),
                     ville_id=ville.id
                 )
                 db.add(attraction)

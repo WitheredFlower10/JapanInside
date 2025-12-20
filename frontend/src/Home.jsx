@@ -7,7 +7,7 @@ const Home = () => {
   const [ville, setVille] = useState(null);
   const [mapInstance, setMapInstance] = useState(null);
 
-  const [villes, setVilles] = useState({});
+  const [villes, setVilles] = useState([]);
 
 
 
@@ -20,7 +20,6 @@ const Home = () => {
       })
       .then(data => {
         
-        // On ajoute les infos du marker pour l'affichage
         setVille({ ...data});
         if (mapInstance) {
           mapInstance.setView([data.latitude, data.longitude], 10);
@@ -37,24 +36,23 @@ async function getVilles() {
   setVilles(data);
   return data;
 }
-  useEffect(() => {
-    const map = L.map("map").setView([36.2048, 138.2529], 6);
-    setMapInstance(map);
+ useEffect(() => {
+  const map = L.map("map").setView([36.2048, 138.2529], 6);
+  setMapInstance(map);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap",
-      maxZoom: 12,
-      minZoom: 5
-    }).addTo(map);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap",
+    maxZoom: 12,
+    minZoom: 5
+  }).addTo(map);
 
-    map.setMaxBounds([[30, 128], [46, 146]]);
+  map.setMaxBounds([[30, 128], [46, 146]]);
 
+  map.on("click", () => setVille(null));
+
+  getVilles().then(villes => {
     const points = [];
- getVilles().then(villes => {
- 
-  villes.forEach(v => {
-
- 
+    villes.forEach(v => {
       points.push([v.latitude, v.longitude]);
 
       const icon = L.icon({
@@ -65,16 +63,23 @@ async function getVilles() {
         popupAnchor: [0, -46]
       });
 
-      const marker = L.marker([v.latitude, v.longitude], { icon, title: v.nom }).addTo(map);
-      marker.on("click", () => onVilleClick(v.nom));
-   })
-});
-    L.polyline(points, { color: "#667eea", weight: 4, opacity: 0.8, dashArray: "10,10", lineCap: "round" }).addTo(map);
+      L.marker([v.latitude, v.longitude], { icon, title: v.nom })
+        .addTo(map)
+        .on("click", () => onVilleClick(v.nom));
+    });
 
-    map.on("click", () => setVille(null));
+    // créer la polyline **après** avoir rempli points
+    L.polyline(points, {
+      color: "#667eea",
+      weight: 4,
+      opacity: 0.8,
+      dashArray: "10,10",
+      lineCap: "round"
+    }).addTo(map);
+  });
 
-    return () => map.remove();
-  }, []);
+  return () => map.remove();
+}, []);
 
   return (
     <>

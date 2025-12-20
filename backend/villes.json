@@ -9,10 +9,10 @@
     "meilleure_saison": "Printemps (mars-mai)",
     "climat": "Subtropical humide",
     "attractions": [
-      { "nom": "Tour de Tokyo", "description": "Tour emblématique offrant une vue panoramique" },
-      { "nom": "Senso-ji", "description": "Temple bouddhiste historique" },
-      { "nom": "Shibuya Crossing", "description": "Carrefour piéton le plus fréquenté au monde" },
-      { "nom": "Palais Impérial", "description": "Résidence de l'empereur du Japon" }
+      { "nom": "Tour de Tokyo", "description": "Tour emblématique offrant une vue panoramique", "latitude":  35.6585848, "longitude": 139.742858 },
+      { "nom": "Senso-ji", "description": "Temple bouddhiste historique", "latitude": 35.7147694, "longitude": 139.7940804 },
+      { "nom": "Shibuya Crossing", "description": "Carrefour piéton le plus fréquenté au monde", "latitude": 35.6668952, "longitude": 139.6720166 },
+      { "nom": "Palais Impérial", "description": "Résidence de l'empereur du Japon", "latitude": 35.683454, "longitude": 139.7529811 }
     ],
     "recettes": [
       { "nom": "Sushi", "description": "Plat japonais à base de riz vinaigré et poisson" },
@@ -30,10 +30,10 @@
     "meilleure_saison": "Automne",
     "climat": "Montagnard",
     "attractions": [
-      { "nom": "Lac Ashi", "description": "Lac volcanique avec vue sur le Mont Fuji" },
-      { "nom": "Owakudani", "description": "Vallée volcanique active" },
-      { "nom": "Musée en plein air", "description": "Musée de sculptures en extérieur" },
-      { "nom": "Sources chaudes", "description": "Onsen traditionnels japonais" }
+      { "nom": "Lac Ashi", "description": "Lac volcanique avec vue sur le Mont Fuji", "latitude": 35.2141986, "longitude": 138.9865545 },
+      { "nom": "Owakudani", "description": "Vallée volcanique active", "latitude": 35.2425136, "longitude": 139.0171279 },
+      { "nom": "Musée en plein air", "description": "Musée de sculptures en extérieur", "latitude": 34.8499558, "longitude": 28.9841455 },
+      { "nom": "Sources chaudes", "description": "Onsen traditionnels japonais", "latitude": 35.315215, "longitude": 138.8091248 }
     ],
     "recettes": [
       { "nom": "Kuro-tamago", "description": "Œufs noirs cuits dans les sources volcaniques" }
@@ -49,10 +49,10 @@
     "meilleure_saison": "Printemps et Automne",
     "climat": "Tempéré",
     "attractions": [
-      { "nom": "Fushimi Inari", "description": "Sanctuaire célèbre pour ses milliers de torii" },
-      { "nom": "Kinkaku-ji", "description": "Temple d'or emblématique" },
-      { "nom": "Gion", "description": "Quartier historique des geishas" },
-      { "nom": "Kiyomizu-dera", "description": "Temple offrant une vue panoramique sur la ville" }
+      { "nom": "Fushimi Inari", "description": "Sanctuaire célèbre pour ses milliers de torii", "latitude": 35.0116, "longitude": 135.7681 },
+      { "nom": "Kinkaku-ji", "description": "Temple d'or emblématique", "latitude": 35.0116, "longitude": 135.7681 },
+      { "nom": "Gion", "description": "Quartier historique des geishas", "latitude": 35.0116, "longitude": 135.7681 },
+      { "nom": "Kiyomizu-dera", "description": "Temple offrant une vue panoramique sur la ville", "latitude": 35.0116, "longitude": 135.7681 }
     ],
     "recettes": [
       { "nom": "Kaiseki", "description": "Cuisine traditionnelle japonaise raffinée" },
@@ -70,10 +70,10 @@
     "meilleure_saison": "Printemps",
     "climat": "Tempéré",
     "attractions": [
-      { "nom": "Todai-ji", "description": "Temple abritant le Grand Bouddha" },
-      { "nom": "Parc de Nara", "description": "Parc célèbre pour ses daims en liberté" },
-      { "nom": "Daibutsu", "description": "Statue géante de Bouddha" },
-      { "nom": "Kasuga-taisha", "description": "Sanctuaire shinto aux lanternes" }
+      { "nom": "Todai-ji", "description": "Temple abritant le Grand Bouddha", "latitude": 34.6851, "longitude": 135.8048 },
+      { "nom": "Parc de Nara", "description": "Parc célèbre pour ses daims en liberté", "latitude": 34.6851, "longitude": 135.8048 },
+      { "nom": "Daibutsu", "description": "Statue géante de Bouddha", "latitude": 34.6851, "longitude": 135.8048 },
+      { "nom": "Kasuga-taisha", "description": "Sanctuaire shinto aux lanternes", "latitude": 34.6851, "longitude": 135.8048 }
     ],
     "recettes": [
       { "nom": "Kaki-no-hazushi", "description": "Sushi traditionnel au kaki fermenté" }
@@ -89,10 +89,10 @@
     "meilleure_saison": "Printemps et Automne",
     "climat": "Subtropical humide",
     "attractions": [
-      { "nom": "Château d'Osaka", "description": "Château historique emblématique" },
-      { "nom": "Dotonbori", "description": "Quartier animé de restaurants et néons" },
-      { "nom": "Universal Studios Japan", "description": "Parc d'attractions populaire" },
-      { "nom": "Umeda Sky Building", "description": "Gratte-ciel avec observatoire" }
+      { "nom": "Château d'Osaka", "description": "Château historique emblématique", "latitude": 34.6937, "longitude": 135.5023 },
+      { "nom": "Dotonbori", "description": "Quartier animé de restaurants et néons", "latitude": 34.6937, "longitude": 135.5023 },
+      { "nom": "Universal Studios Japan", "description": "Parc d'attractions populaire", "latitude": 34.6937, "longitude": 135.5023 },
+      { "nom": "Umeda Sky Building", "description": "Gratte-ciel avec observatoire", "latitude": 34.6937, "longitude": 135.5023 }
     ],
     "recettes": [
       { "nom": "Takoyaki", "description": "Boulettes de poulpe" },
@@ -110,10 +110,10 @@
     "meilleure_saison": "Printemps",
     "climat": "Subtropical humide",
     "attractions": [
-      { "nom": "Mémorial de la Paix", "description": "Lieu de mémoire du bombardement atomique" },
-      { "nom": "Dôme de Genbaku", "description": "Vestige classé au patrimoine mondial" },
-      { "nom": "Miyajima", "description": "Île célèbre pour son torii flottant" },
-      { "nom": "Château d'Hiroshima", "description": "Château historique reconstruit" }
+      { "nom": "Mémorial de la Paix", "description": "Lieu de mémoire du bombardement atomique", "latitude": 34.3853, "longitude": 132.4553 },
+      { "nom": "Dôme de Genbaku", "description": "Vestige classé au patrimoine mondial", "latitude": 34.3853, "longitude": 132.4553 },
+      { "nom": "Miyajima", "description": "Île célèbre pour son torii flottant", "latitude": 34.3853, "longitude": 132.4553 },
+      { "nom": "Château d'Hiroshima", "description": "Château historique reconstruit", "latitude": 34.3853, "longitude": 132.4553 }
     ],
     "recettes": [
       { "nom": "Okonomiyaki d'Hiroshima", "description": "Version locale du plat emblématique" },
