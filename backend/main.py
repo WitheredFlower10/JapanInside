@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 import models, schemas, crud
-from database import SessionLocal, engine
+from database import SessionLocal, engine, Base
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -95,7 +95,18 @@ def create_ville(
     db.refresh(db_ville)
     return db_ville
 
-
+@app.post("/api/flushDB")
+def flush_db(db: Session = Depends(get_db)):
+   
+    try:
+       
+        Base.metadata.drop_all(bind=engine)
+       
+        Base.metadata.create_all(bind=engine)
+        return {}, 200
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lors de la réinitialisation : {str(e)}")
+    
 @app.post("/api/createDB")
 def setup():
     create_tables.execute()
@@ -150,20 +161,25 @@ def create_recette(recette: schemas.RecetteCreate, db: Session = Depends(get_db)
     """Crée une nouvelle recette"""
     return crud.create_recette(db, recette)
 
-# Route de santé de l'API
-@app.get("/health")
+@app.get("/api/health", response_model=dict)
 async def health_check():
-    """Vérifie l'état de l'API"""
+  
     return {
         "status": "healthy",
         "service": "Japan Inside API",
         "version": "1.0.0",
+        "description": "API pour consulter les villes, attractions et recettes japonaises",
         "endpoints": {
-            "carte": "/carte",
+            "hello": "/api/hello",
             "villes": "/api/villes",
+            "ville_detail": "/api/villes/{nom_ville}",
             "itineraire": "/api/itineraire",
-            "articles": "/api/articles",
-            "recettes": "/api/recettes"
+            "recettes": "/api/recettes",
+            "create_ville": "/api/villes [POST]",
+            "create_recette": "/api/recettes [POST]",
+            "flush_db": "/api/flushDB [POST]",
+            "setup_db": "/api/createDB [POST]",
+            "insert_data": "/api/insertDATA [POST]"
         }
     }
 

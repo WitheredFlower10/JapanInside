@@ -29,7 +29,6 @@
             max-width: 350px;
             max-height: 80vh;
             overflow-y: auto;
-            display: none;
             animation: slideIn 0.3s ease;
         }
         

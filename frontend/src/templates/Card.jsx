@@ -1,4 +1,5 @@
 
+
 import { Link } from "react-router-dom";
 const Card = ({ ville }) => {
     return (
@@ -19,9 +20,9 @@ const Card = ({ ville }) => {
                     
                     <div style={{"marginTop": "20px"}}>
                         <h3>🌤️ Climat & Spécialités</h3>
-                        <p><strong>Climat:</strong> {ville.informations_supp.climat}</p>
-                        <p><strong>Meilleure saison:</strong> {ville['informations_supp']['meilleure_saison']}</p>
-                        <p><strong>Spécialités culinaires:</strong> {ville['informations_supp']['specialites']}</p>
+                        <p><strong>Climat:</strong> {ville.climat}</p>
+                        <p><strong>Meilleure saison:</strong> {ville['meilleure_saison']}</p>
+                       
                     </div>
                 
                     <Link to="/" className="back-btn">← Retour à la carte</Link>
@@ -30,7 +31,7 @@ const Card = ({ ville }) => {
                 <div className="attractions-section">
                     <h2>🏛️ Attractions</h2>
                     <ul>
-                       
+                  
                     </ul>
                     
                     <div className="map-container">
