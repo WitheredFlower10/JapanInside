@@ -12,8 +12,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: |
-          npm ci
-          npm run lint --if-present
-          npm run build
-          npm test
+      - run: npm ci
+      - run: npm run lint --if-present
+      - run: npm run format:check || true
+      - run: npm audit --audit-level=high
+      - run: npm run build
+      - run: npm test -- --ci --coverage

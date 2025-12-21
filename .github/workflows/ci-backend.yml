@@ -13,4 +13,8 @@ jobs:
         with:
           python-version: 3.11
       - run: pip install -r requirements.txt
-      - run: PYTHONPATH=. pytest tests
+      - run: pip install flake8 pytest-cov safety mypy
+      - run: flake8 .
+      - run: mypy .
+      - run: safety check
+      - run: pytest --cov=backend tests
