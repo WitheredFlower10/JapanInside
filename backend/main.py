@@ -87,7 +87,7 @@ def reorder_villes(
             db.query(models.Ville).filter(models.Ville.id == item.id).first()
         )
         if ville:
-            ville.position = item.position # type: ignore
+            ville.position = item.position  # type: ignore
     db.commit()
     return {"message": "OK"}
 
@@ -104,14 +104,14 @@ def update_ville(
         raise HTTPException(status_code=404, detail="Ville non trouvée")
 
     # Update fields safely
-    ville.nom = ville_data.nom # type: ignore
-    ville.position = ville_data.position # type: ignore
-    ville.description = ville_data.description # type: ignore
-    ville.latitude = ville_data.latitude # type: ignore
-    ville.longitude = ville_data.longitude # type: ignore
-    ville.population = ville_data.population # type: ignore
-    ville.meilleure_saison = ville_data.meilleure_saison # type: ignore
-    ville.climat = ville_data.climat # type: ignore
+    ville.nom = ville_data.nom  # type: ignore
+    ville.position = ville_data.position  # type: ignore
+    ville.description = ville_data.description  # type: ignore
+    ville.latitude = ville_data.latitude  # type: ignore
+    ville.longitude = ville_data.longitude  # type: ignore
+    ville.population = ville_data.population  # type: ignore
+    ville.meilleure_saison = ville_data.meilleure_saison  # type: ignore
+    ville.climat = ville_data.climat  # type: ignore
 
     # Clear old relations
     for attr in list(ville.attractions):
