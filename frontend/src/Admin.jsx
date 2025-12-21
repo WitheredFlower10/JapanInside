@@ -12,6 +12,7 @@ import {
   faPlus,
   faFileImport,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 
 const fetchCoordinatesFromNominatim = async (ville) => {
@@ -233,6 +234,9 @@ const importTemplate = async () => {
           <button className="add-btn" onClick={importTemplate}>
           <FontAwesomeIcon icon={faFileImport} /> Importer le template
         </button>
+           <Link to={'/'} className="add-btn">
+          <FontAwesomeIcon icon={faFileImport} /> Retour à l'accueil
+        </Link>
         </div>
       </div>
 
