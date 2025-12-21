@@ -14,18 +14,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-
 const fetchCoordinatesFromNominatim = async (ville) => {
   const res = await fetch(
     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-      ville
+      ville,
     )}&format=json&limit=1`,
     {
       headers: {
-        "Accept": "application/json",
-        "User-Agent": "JapanInsideAdmin/1.0"
-      }
-    }
+        Accept: "application/json",
+        "User-Agent": "JapanInsideAdmin/1.0",
+      },
+    },
   );
 
   const data = await res.json();
@@ -40,8 +39,6 @@ const fetchCoordinatesFromNominatim = async (ville) => {
   };
 };
 
-
-
 const Admin = () => {
   const [villes, setVilles] = useState([]);
   const [selectedVille, setSelectedVille] = useState(null);
@@ -50,7 +47,6 @@ const Admin = () => {
   const [isViewing, setIsViewing] = useState(false);
 
   useEffect(() => {
-
     fetchVilles();
   }, []);
 
@@ -74,19 +70,18 @@ const Admin = () => {
     ];
 
     try {
-        console.log(
-          newVilles.map((v, i) => ({ id: v.id, position: i + 1 })))
-       
-     const res = await fetch("/api/villes/reorder", {
+      console.log(newVilles.map((v, i) => ({ id: v.id, position: i + 1 })));
+
+      const res = await fetch("/api/villes/reorder", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
-          newVilles.map((v, i) => ({ id: v.id, position: i + 1 }))
+          newVilles.map((v, i) => ({ id: v.id, position: i + 1 })),
         ),
       });
       setVilles(newVilles);
       toast.success("Ordre des villes mis à jour !");
-      console.log(res)
+      console.log(res);
     } catch (err) {
       console.error(err);
     }
@@ -135,108 +130,107 @@ const Admin = () => {
     setIsAdding(true);
     setIsViewing(false);
   };
-const handleSave = async () => {
-  if (!selectedVille.nom || selectedVille.nom.trim() === "") {
-    toast.error("Le nom de la ville est obligatoire");
-    return;
-  }
-
-  try {
-    const villeCoords = await fetchCoordinatesFromNominatim(selectedVille.nom);
-
-    if (!villeCoords) {
-      toast.error("Ville introuvable. Vérifiez l’orthographe.");
+  const handleSave = async () => {
+    if (!selectedVille.nom || selectedVille.nom.trim() === "") {
+      toast.error("Le nom de la ville est obligatoire");
       return;
     }
 
-    const attractionsWithCoords = [];
-
-    for (const attraction of selectedVille.attractions || []) {
-      if (!attraction.nom || attraction.nom.trim() === "") continue;
-
-      const coords = await fetchCoordinatesFromNominatim(
-        attraction.nom,
-        selectedVille.nom
+    try {
+      const villeCoords = await fetchCoordinatesFromNominatim(
+        selectedVille.nom,
       );
 
-      if (!coords) {
-        toast.error(
-          `Attraction introuvable : "${attraction.nom}". Corrigez ou supprimez-la.`
-        );
-        return; 
+      if (!villeCoords) {
+        toast.error("Ville introuvable. Vérifiez l’orthographe.");
+        return;
       }
 
-      attractionsWithCoords.push({
-        ...attraction,
-        latitude: coords.latitude,
-        longitude: coords.longitude,
+      const attractionsWithCoords = [];
+
+      for (const attraction of selectedVille.attractions || []) {
+        if (!attraction.nom || attraction.nom.trim() === "") continue;
+
+        const coords = await fetchCoordinatesFromNominatim(
+          attraction.nom,
+          selectedVille.nom,
+        );
+
+        if (!coords) {
+          toast.error(
+            `Attraction introuvable : "${attraction.nom}". Corrigez ou supprimez-la.`,
+          );
+          return;
+        }
+
+        attractionsWithCoords.push({
+          ...attraction,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        });
+      }
+
+      const villeToSend = {
+        ...selectedVille,
+        latitude: villeCoords.latitude,
+        longitude: villeCoords.longitude,
+        attractions: attractionsWithCoords,
+      };
+
+      const method = isAdding ? "POST" : "PUT";
+      const url = isAdding ? "/api/villes" : `/api/villes/${selectedVille.id}`;
+
+      await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(villeToSend),
       });
+
+      setShowModal(false);
+      fetchVilles();
+      toast.success(isAdding ? "Ville ajoutée !" : "Ville mise à jour !");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erreur lors de la sauvegarde");
     }
-
-    const villeToSend = {
-      ...selectedVille,
-      latitude: villeCoords.latitude,
-      longitude: villeCoords.longitude,
-      attractions: attractionsWithCoords,
-    };
-
-    const method = isAdding ? "POST" : "PUT";
-    const url = isAdding
-      ? "/api/villes"
-      : `/api/villes/${selectedVille.id}`;
-
-    await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(villeToSend),
-    });
-
-    setShowModal(false);
-    fetchVilles();
-    toast.success(isAdding ? "Ville ajoutée !" : "Ville mise à jour !");
-  } catch (err) {
-    console.error(err);
-    toast.error("Erreur lors de la sauvegarde");
-  }
-};
-const importTemplate = async () => {
+  };
+  const importTemplate = async () => {
     const confirmFlush = window.confirm(
-    "⚠️ Cette opération va réinitialiser la base de données et supprimer toutes vos données actuelles. Continuer ?"
-  );
-  
-  if (!confirmFlush) return;
-  try {
-    let res = await fetch("/api/flushDB", { method: "POST" });
-    if (!res.ok) throw new Error("Erreur lors du flush de la base");
+      "⚠️ Cette opération va réinitialiser la base de données et supprimer toutes vos données actuelles. Continuer ?",
+    );
 
-    res = await fetch("/api/insertDATA", { method: "POST" });
-    if (!res.ok) throw new Error("Erreur lors de l'insertion des données");
+    if (!confirmFlush) return;
+    try {
+      let res = await fetch("/api/flushDB", { method: "POST" });
+      if (!res.ok) throw new Error("Erreur lors du flush de la base");
 
-    toast.success("Base réinitialisée et données insérées avec succès !");
-    
-    fetchVilles();
-  } catch (err) {
-    console.error(err);
-    toast.error(`Erreur : ${err.message}`);
-  }
-};
+      res = await fetch("/api/insertDATA", { method: "POST" });
+      if (!res.ok) throw new Error("Erreur lors de l'insertion des données");
 
+      toast.success("Base réinitialisée et données insérées avec succès !");
+
+      fetchVilles();
+    } catch (err) {
+      console.error(err);
+      toast.error(`Erreur : ${err.message}`);
+    }
+  };
 
   return (
     <div className="admin-container">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="admin-header">
         <h1>Administration</h1>
-        <div style={{display: "flex", flexDirection: "column", gap: "15px"}}>
-        <button className="add-btn" onClick={openAddModal}>
-          <FontAwesomeIcon icon={faPlus} /> Ajouter une ville
-        </button>
+        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+          <button className="add-btn" onClick={openAddModal}>
+            <FontAwesomeIcon icon={faPlus} /> Ajouter une ville
+          </button>
           <button className="add-btn" onClick={importTemplate}>
-          <FontAwesomeIcon icon={faFileImport} /> Importer le template
-        </button>
-           <Link to={'/'} className="add-btn">
-          <FontAwesomeIcon icon={faFileImport} /> Retour à l'accueil
-        </Link>
+            <FontAwesomeIcon icon={faFileImport} /> Importer le template
+          </button>
+          <Link to={"/"} className="add-btn">
+            <FontAwesomeIcon icon={faFileImport} /> Retour à l'accueil
+          </Link>
         </div>
       </div>
 
@@ -277,8 +271,8 @@ const importTemplate = async () => {
                 ? `Ville: ${selectedVille.nom}`
                 : `Modifier: ${selectedVille.nom}`}
             </h2>
-            <div className="modal-fields" style={{marginTop: "25px"}}>
-                <label>Nom</label>
+            <div className="modal-fields" style={{ marginTop: "25px" }}>
+              <label>Nom</label>
               <input
                 type="text"
                 placeholder="Nom"
@@ -290,7 +284,7 @@ const importTemplate = async () => {
               />
               {!isAdding && (
                 <>
-                <label>Description</label>
+                  <label>Description</label>
                   <textarea
                     placeholder="Description"
                     value={selectedVille.description || ""}
@@ -302,17 +296,20 @@ const importTemplate = async () => {
                       })
                     }
                   />
-                <label>Climat</label>
+                  <label>Climat</label>
                   <input
                     type="text"
                     placeholder="Climat"
                     value={selectedVille.climat || ""}
                     readOnly={isViewing}
                     onChange={(e) =>
-                      setSelectedVille({ ...selectedVille, climat: e.target.value })
+                      setSelectedVille({
+                        ...selectedVille,
+                        climat: e.target.value,
+                      })
                     }
                   />
-                <label>Meilleure saison</label>
+                  <label>Meilleure saison</label>
                   <input
                     type="text"
                     placeholder="Meilleure saison"
@@ -325,8 +322,8 @@ const importTemplate = async () => {
                       })
                     }
                   />
-                  
-                <label>Population</label>
+
+                  <label>Population</label>
                   <input
                     type="number"
                     placeholder="Population"
@@ -339,7 +336,6 @@ const importTemplate = async () => {
                       })
                     }
                   />
-            
 
                   {/* Recettes */}
                   <h3>Recettes</h3>
@@ -364,7 +360,7 @@ const importTemplate = async () => {
                           className="delete-btn"
                           onClick={() => {
                             const newRecettes = selectedVille.recettes.filter(
-                              (_, i) => i !== idx
+                              (_, i) => i !== idx,
                             );
                             setSelectedVille({
                               ...selectedVille,
@@ -416,9 +412,10 @@ const importTemplate = async () => {
                         <button
                           className="delete-btn"
                           onClick={() => {
-                            const newAttractions = selectedVille.attractions.filter(
-                              (_, i) => i !== idx
-                            );
+                            const newAttractions =
+                              selectedVille.attractions.filter(
+                                (_, i) => i !== idx,
+                              );
                             setSelectedVille({
                               ...selectedVille,
                               attractions: newAttractions,
@@ -451,7 +448,12 @@ const importTemplate = async () => {
             </div>
 
             <div className="modal-buttons">
-              <button onClick={() => setShowModal(false)} className="action-button">Fermer</button>
+              <button
+                onClick={() => setShowModal(false)}
+                className="action-button"
+              >
+                Fermer
+              </button>
               {!isViewing && (
                 <button onClick={handleSave} className="action-button">
                   {isAdding ? "Ajouter" : "Enregistrer"}

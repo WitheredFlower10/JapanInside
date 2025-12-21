@@ -1,12 +1,20 @@
+"""Insert initial data into the database from a JSON file."""
+
 import json
-from sqlalchemy.orm import Session
-from database import SessionLocal
+
 import models
+from database import SessionLocal
+from sqlalchemy.orm import Session
 
 JSON_FILE = "villes.json"
 
 
 def execute():
+    """
+    Insert.
+
+    Villes, attractions, and recettes from the JSON file into the database.
+    """
     db: Session = SessionLocal()
 
     try:
@@ -14,7 +22,7 @@ def execute():
             villes_data = json.load(f)
 
         for ville_data in villes_data:
-            # Créer la ville
+            # Create Ville
             ville = models.Ville(
                 nom=ville_data["nom"],
                 position=ville_data.get("position"),
@@ -26,11 +34,10 @@ def execute():
                 climat=ville_data.get("climat"),
             )
             db.add(ville)
-            db.flush()  # flush pour obtenir l'id de la ville
+            db.flush()  # flush to get the ville.id
 
-            # Ajouter les attractions
+            # Add Attractions
             for attr_data in ville_data.get("attractions", []):
-                print(attr_data)
                 attraction = models.Attraction(
                     nom=attr_data["nom"],
                     description=attr_data.get("description"),
@@ -40,7 +47,7 @@ def execute():
                 )
                 db.add(attraction)
 
-            # Ajouter les recettes
+            # Add Recettes
             for rec_data in ville_data.get("recettes", []):
                 recette = models.Recette(
                     nom=rec_data["nom"],
@@ -49,7 +56,7 @@ def execute():
                 )
                 db.add(recette)
                 db.flush()
-                # Lier la recette à la ville
+                # Link recette to ville
                 ville.recettes.append(recette)
 
         db.commit()

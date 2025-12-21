@@ -1,10 +1,17 @@
-from database import engine, Base
-from models import Ville, Attraction, Recette
+"""
+File that contains a method to create all the tables for PostgreSQL.
 
+Authors:
+    Justine HAKIM
+    Aman GHAZANFAR
+"""
+
+from database import Base, engine
 from sqlalchemy import text
 
 
 def execute():
+    """Create all tables in the public PostgreSQL schema."""
     with engine.connect() as conn:
         conn.execution_options(isolation_level="AUTOCOMMIT")
 

@@ -1,25 +1,39 @@
-from fastapi import FastAPI, Depends, HTTPException, Body
-from sqlalchemy.orm import Session
-import models, schemas, crud
-from database import SessionLocal, engine, Base
-from fastapi.middleware.cors import CORSMiddleware
-import os
-from fastapi.responses import HTMLResponse, JSONResponse
-from sqlalchemy.orm import joinedload
-from fastapi.staticfiles import StaticFiles
+"""Main FastAPI application for Japan Inside API.
+
+Provides endpoints for villes, attractions, recettes, and database management.
+"""
+
 import json
+import os
 
 import create_tables
+import crud
 import insert_data
-from typing import List
+import models
+import schemas
+from database import Base, SessionLocal, engine
+from fastapi import Body, Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session, joinedload
 
+# Load villes data from JSON
 with open("villes.json", "r", encoding="utf-8") as f:
     villes_data = json.load(f)
 
-itineraire = ["Tokyo", "Hakone", "Kyoto", "Nara", "Osaka", "Hiroshima", "Tokyo"]
+itineraire = [
+    "Tokyo",
+    "Hakone",
+    "Kyoto",
+    "Nara",
+    "Osaka",
+    "Hiroshima",
+    "Tokyo",
+]
 
+# Create database tables
 models.Base.metadata.create_all(bind=engine)
 
+# Initialize FastAPI app
 app = FastAPI(title="Japan Inside API")
 origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
@@ -33,6 +47,7 @@ app.add_middleware(
 
 
 def get_db():
+    """Provide a database session to FastAPI routes."""
     db = SessionLocal()
     try:
         yield db
@@ -40,13 +55,9 @@ def get_db():
         db.close()
 
 
-@app.get("/api/hello")
-def hello_world():
-    return {"message": "Hello World"}
-
-
 @app.get("/")
 def hello_world():
+    """Return a simple status response."""
     DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///:memory:")
     print(DATABASE_URL)
     return {}, 200
@@ -54,25 +65,28 @@ def hello_world():
 
 @app.get("/api/villes", response_model=list[schemas.VilleOut])
 async def get_all_villes(db: Session = Depends(get_db)):
-    """Retourne toutes les villes disponibles"""
+    """Return all villes ordered by position."""
     return db.query(models.Ville).order_by(models.Ville.position).all()
 
 
 @app.get("/api/attractions", response_model=list[schemas.AttractionOut])
 async def get_all_attractions(db: Session = Depends(get_db)):
-
+    """Return all attractions."""
     return crud.get_attractions(db)
 
 
 @app.put("/api/villes/reorder")
 def reorder_villes(
-    new_order: list[schemas.VilleOrder] = Body(...), db: Session = Depends(get_db)
+    new_order: list[schemas.VilleOrder] = Body(...),
+    db: Session = Depends(get_db),
 ):
+    """Update the order of villes according to client input."""
     for item in new_order:
-        ville = db.query(models.Ville).filter(models.Ville.id == item.id).first()
+        ville = (
+            db.query(models.Ville).filter(models.Ville.id == item.id).first()
+        )
         if ville:
             ville.position = item.position
-
     db.commit()
     return {"message": "OK"}
 
@@ -81,12 +95,12 @@ def reorder_villes(
 def update_ville(
     id: int, ville_data: schemas.VilleCreate, db: Session = Depends(get_db)
 ):
-    # Récupérer la ville existante
+    """Update an existing ville, including its attractions and recettes."""
     ville = db.query(models.Ville).filter(models.Ville.id == id).first()
     if not ville:
         raise HTTPException(status_code=404, detail="Ville non trouvée")
 
-    # Mettre à jour les champs simples
+    # Update fields
     ville.nom = ville_data.nom
     ville.position = ville_data.position
     ville.description = ville_data.description
@@ -96,23 +110,22 @@ def update_ville(
     ville.meilleure_saison = ville_data.meilleure_saison
     ville.climat = ville_data.climat
 
-    # Supprimer les anciennes attractions
+    # Remove old attractions and recettes
     for attr in list(ville.attractions):
         db.delete(attr)
     ville.attractions = []
 
-    # Supprimer les anciennes recettes
     for rec in list(ville.recettes):
         db.delete(rec)
     ville.recettes = []
 
-    db.commit()  # commit nécessaire pour valider les suppressions
+    db.commit()
 
-    # Ajouter les nouvelles attractions
+    # Add new attractions
     for attraction in ville_data.attractions:
         ville.attractions.append(models.Attraction(**attraction.dict()))
 
-    # Ajouter les nouvelles recettes
+    # Add new recettes
     for recette in ville_data.recettes:
         db_recette = models.Recette(**recette.dict())
         db.add(db_recette)
@@ -120,12 +133,12 @@ def update_ville(
 
     db.commit()
     db.refresh(ville)
-
     return ville
 
 
 @app.post("/api/villes", response_model=schemas.Ville)
 def create_ville(ville: schemas.VilleCreate, db: Session = Depends(get_db)):
+    """Create a new ville, including its attractions and recettes."""
     db_ville = models.Ville(
         nom=ville.nom,
         position=ville.position,
@@ -139,7 +152,7 @@ def create_ville(ville: schemas.VilleCreate, db: Session = Depends(get_db)):
     db.add(db_ville)
     db.commit()
     db.refresh(db_ville)
-    print(ville.attractions)
+
     for attraction in ville.attractions:
         db_ville.attractions.append(models.Attraction(**attraction.dict()))
 
@@ -155,59 +168,68 @@ def create_ville(ville: schemas.VilleCreate, db: Session = Depends(get_db)):
 
 @app.post("/api/createDB")
 def setup():
+    """Create all database tables."""
     create_tables.execute()
     return {}, 200
 
 
 @app.post("/api/flushDB")
 def flush_db(db: Session = Depends(get_db)):
-
+    """Drop and recreate all database tables."""
     try:
-
         Base.metadata.drop_all(bind=engine)
-
         Base.metadata.create_all(bind=engine)
         return {}, 200
     except Exception as e:
         raise HTTPException(
-            status_code=500, detail=f"Erreur lors de la réinitialisation : {str(e)}"
+            status_code=500,
+            detail=f"Erreur lors de la réinitialisation : {str(e)}",
         )
 
 
 @app.post("/api/insertDATA")
 def insert():
+    """
+    Insert initial villes, attractions.
+
+    And recettes data into the database.
+    """
     insert_data.execute()
     return {}, 200
 
 
 @app.get("/api/villes/{nom_ville}", response_model=schemas.VilleOut)
 def get_ville(nom_ville: str, db: Session = Depends(get_db)):
+    """Return a ville with its attractions and recettes."""
     ville = (
         db.query(models.Ville)
         .options(
-            joinedload(models.Ville.attractions), joinedload(models.Ville.recettes)
+            joinedload(models.Ville.attractions),
+            joinedload(models.Ville.recettes),
         )
         .filter(models.Ville.nom.ilike(nom_ville))
         .first()
     )
     if not ville:
-        raise HTTPException(status_code=404, detail=f"Ville '{nom_ville}' non trouvée")
+        raise HTTPException(
+            status_code=404, detail=f"Ville '{nom_ville}' non trouvée"
+        )
     return ville
 
 
 @app.delete("/api/villes/{id}")
 def delete_ville(id: int, db: Session = Depends(get_db)):
+    """Delete a ville by ID."""
     ville = db.query(models.Ville).filter(models.Ville.id == id).first()
     if not ville:
         raise HTTPException(status_code=404, detail="Ville non trouvée")
-
     db.delete(ville)
     db.commit()
 
 
 @app.get("/api/itineraire")
 async def get_itineraire_complet():
-    """Retourne l'itinéraire complet"""
+    """Return the full itinerary with coordinates for each étape."""
     return {
         "itineraire": itineraire,
         "etapes": [
@@ -224,31 +246,29 @@ async def get_itineraire_complet():
     }
 
 
-@app.get("/api/hello")
-def hello_world():
-    return {"message": "Bienvenue sur Japan Inside API!"}
-
-
 @app.get("/api/recettes", response_model=list[schemas.Recette])
 def read_recettes(db: Session = Depends(get_db)):
-    """Retourne toutes les recettes"""
+    """Return all recettes."""
     return crud.get_recettes(db)
 
 
 @app.post("/api/recettes", response_model=schemas.Recette)
-def create_recette(recette: schemas.RecetteCreate, db: Session = Depends(get_db)):
-    """Crée une nouvelle recette"""
+def create_recette(
+    recette: schemas.RecetteCreate, db: Session = Depends(get_db)
+):
+    """Create a new recette."""
     return crud.create_recette(db, recette)
 
 
 @app.get("/api/health", response_model=dict)
 async def health_check():
-
+    """Return the API health status."""
     return {
         "status": "healthy",
         "service": "Japan Inside API",
         "version": "1.0.0",
-        "description": "API pour consulter les villes, attractions et recettes japonaises",
+        "description": """Consulter les villes,
+        attractions et recettes japonaises""",
         "endpoints": {
             "hello": "/api/hello",
             "villes": "/api/villes",

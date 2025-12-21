@@ -9,26 +9,73 @@
     "meilleure_saison": "Printemps (mars‑mai)",
     "climat": "Subtropical humide",
     "attractions": [
-      { "nom": "Tour de Tokyo", "description": "Tour emblématique offrant une vue panoramique", "latitude": 35.658581, "longitude": 139.745433 },
-      { "nom": "Senso‑ji", "description": "Temple bouddhiste historique", "latitude": 35.714765, "longitude": 139.796655 },
-      { "nom": "Shibuya Crossing", "description": "Carrefour piéton le plus fréquenté au monde", "latitude": 35.659492, "longitude": 139.700553 },
-      { "nom": "Palais Impérial", "description": "Résidence de l'empereur du Japon", "latitude": 35.685175, "longitude": 139.752799 }
+      {
+        "nom": "Tour de Tokyo",
+        "description": "Tour emblématique offrant une vue panoramique",
+        "latitude": 35.658581,
+        "longitude": 139.745433
+      },
+      {
+        "nom": "Senso‑ji",
+        "description": "Temple bouddhiste historique",
+        "latitude": 35.714765,
+        "longitude": 139.796655
+      },
+      {
+        "nom": "Shibuya Crossing",
+        "description": "Carrefour piéton le plus fréquenté au monde",
+        "latitude": 35.659492,
+        "longitude": 139.700553
+      },
+      {
+        "nom": "Palais Impérial",
+        "description": "Résidence de l'empereur du Japon",
+        "latitude": 35.685175,
+        "longitude": 139.752799
+      }
     ],
     "recettes": [
       {
         "nom": "Sushi",
         "description": "Plat japonais à base de riz vinaigré et poisson",
-        "ingredients": ["riz à sushi", "vinaigre de riz", "sucre", "sel", "saumon", "thon", "algue nori", "wasabi", "gingembre mariné"]
+        "ingredients": [
+          "riz à sushi",
+          "vinaigre de riz",
+          "sucre",
+          "sel",
+          "saumon",
+          "thon",
+          "algue nori",
+          "wasabi",
+          "gingembre mariné"
+        ]
       },
       {
         "nom": "Ramen",
         "description": "Soupe de nouilles japonaise",
-        "ingredients": ["nouilles ramen", "bouillon (tonkotsu/shoyu/miso)", "porc chashu", "œuf mollet", "oignon vert", "algue nori", "champignons"]
+        "ingredients": [
+          "nouilles ramen",
+          "bouillon (tonkotsu/shoyu/miso)",
+          "porc chashu",
+          "œuf mollet",
+          "oignon vert",
+          "algue nori",
+          "champignons"
+        ]
       },
       {
         "nom": "Tempura",
         "description": "Beignets de légumes et fruits de mer",
-        "ingredients": ["crevettes", "patate douce", "courgette", "poivron", "farine", "œuf", "eau glacée", "huile pour friture"]
+        "ingredients": [
+          "crevettes",
+          "patate douce",
+          "courgette",
+          "poivron",
+          "farine",
+          "œuf",
+          "eau glacée",
+          "huile pour friture"
+        ]
       }
     ]
   },
@@ -42,10 +89,30 @@
     "meilleure_saison": "Automne",
     "climat": "Montagnard",
     "attractions": [
-      { "nom": "Lac Ashi", "description": "Lac volcanique avec vue sur le Mont Fuji", "latitude": 35.218056, "longitude": 139.020833 },
-      { "nom": "Owakudani", "description": "Vallée volcanique active", "latitude": 35.242778, "longitude": 139.023056 },
-      { "nom": "Musée en plein air de Hakone", "description": "Musée de sculptures en extérieur", "latitude": 35.232500, "longitude": 139.026389 },
-      { "nom": "Sources chaudes d’Hakone", "description": "Onsen traditionnels japonais", "latitude": 35.214167, "longitude": 139.006667 }
+      {
+        "nom": "Lac Ashi",
+        "description": "Lac volcanique avec vue sur le Mont Fuji",
+        "latitude": 35.218056,
+        "longitude": 139.020833
+      },
+      {
+        "nom": "Owakudani",
+        "description": "Vallée volcanique active",
+        "latitude": 35.242778,
+        "longitude": 139.023056
+      },
+      {
+        "nom": "Musée en plein air de Hakone",
+        "description": "Musée de sculptures en extérieur",
+        "latitude": 35.2325,
+        "longitude": 139.026389
+      },
+      {
+        "nom": "Sources chaudes d’Hakone",
+        "description": "Onsen traditionnels japonais",
+        "latitude": 35.214167,
+        "longitude": 139.006667
+      }
     ],
     "recettes": [
       {
@@ -65,21 +132,52 @@
     "meilleure_saison": "Printemps et Automne",
     "climat": "Tempéré",
     "attractions": [
-      { "nom": "Fushimi Inari", "description": "Sanctuaire célèbre pour ses mille torii", "latitude": 34.967139, "longitude": 135.772672 },
-      { "nom": "Kinkaku‑ji", "description": "Temple du Pavillon d’Or", "latitude": 35.039369, "longitude": 135.729243 },
-      { "nom": "Gion", "description": "Quartier historique des geishas", "latitude": 35.003775, "longitude": 135.778335 },
-      { "nom": "Kiyomizu‑dera", "description": "Temple offrant une vue panoramique", "latitude": 34.994856, "longitude": 135.785046 }
+      {
+        "nom": "Fushimi Inari",
+        "description": "Sanctuaire célèbre pour ses mille torii",
+        "latitude": 34.967139,
+        "longitude": 135.772672
+      },
+      {
+        "nom": "Kinkaku‑ji",
+        "description": "Temple du Pavillon d’Or",
+        "latitude": 35.039369,
+        "longitude": 135.729243
+      },
+      {
+        "nom": "Gion",
+        "description": "Quartier historique des geishas",
+        "latitude": 35.003775,
+        "longitude": 135.778335
+      },
+      {
+        "nom": "Kiyomizu‑dera",
+        "description": "Temple offrant une vue panoramique",
+        "latitude": 34.994856,
+        "longitude": 135.785046
+      }
     ],
     "recettes": [
       {
         "nom": "Kaiseki",
         "description": "Cuisine traditionnelle japonaise raffinée",
-        "ingredients": ["riz", "poisson frais", "légumes de saison", "soupes légères", "pickles", "tofu"]
+        "ingredients": [
+          "riz",
+          "poisson frais",
+          "légumes de saison",
+          "soupes légères",
+          "pickles",
+          "tofu"
+        ]
       },
       {
         "nom": "Matcha",
         "description": "Thé vert en poudre",
-        "ingredients": ["poudre de thé vert matcha", "eau chaude", "sucre (facultatif)"]
+        "ingredients": [
+          "poudre de thé vert matcha",
+          "eau chaude",
+          "sucre (facultatif)"
+        ]
       },
       {
         "nom": "Yatsuhashi",
@@ -98,16 +196,41 @@
     "meilleure_saison": "Printemps",
     "climat": "Tempéré",
     "attractions": [
-      { "nom": "Todai‑ji", "description": "Temple abritant le Grand Bouddha", "latitude": 34.688556, "longitude": 135.839936 },
-      { "nom": "Parc de Nara", "description": "Parc célèbre pour ses daims en liberté", "latitude": 34.685100, "longitude": 135.843912 },
-      { "nom": "Daibutsu Hall", "description": "Statue géante de Bouddha", "latitude": 34.688600, "longitude": 135.839400 },
-      { "nom": "Kasuga‑taisha", "description": "Sanctuaire shinto aux lanternes", "latitude": 34.685259, "longitude": 135.846559 }
+      {
+        "nom": "Todai‑ji",
+        "description": "Temple abritant le Grand Bouddha",
+        "latitude": 34.688556,
+        "longitude": 135.839936
+      },
+      {
+        "nom": "Parc de Nara",
+        "description": "Parc célèbre pour ses daims en liberté",
+        "latitude": 34.6851,
+        "longitude": 135.843912
+      },
+      {
+        "nom": "Daibutsu Hall",
+        "description": "Statue géante de Bouddha",
+        "latitude": 34.6886,
+        "longitude": 135.8394
+      },
+      {
+        "nom": "Kasuga‑taisha",
+        "description": "Sanctuaire shinto aux lanternes",
+        "latitude": 34.685259,
+        "longitude": 135.846559
+      }
     ],
     "recettes": [
       {
         "nom": "Kaki‑no‑hazushi",
         "description": "Sushi traditionnel au kaki fermenté",
-        "ingredients": ["riz à sushi", "kaki (fruit)", "vinaigre de riz", "algues nori"]
+        "ingredients": [
+          "riz à sushi",
+          "kaki (fruit)",
+          "vinaigre de riz",
+          "algues nori"
+        ]
       }
     ]
   },
@@ -121,26 +244,66 @@
     "meilleure_saison": "Printemps et Automne",
     "climat": "Subtropical humide",
     "attractions": [
-      { "nom": "Château d'Osaka", "description": "Château historique emblématique", "latitude": 34.687315, "longitude": 135.526201 },
-      { "nom": "Dotonbori", "description": "Quartier animé de restaurants et néons", "latitude": 34.668695, "longitude": 135.501227 },
-      { "nom": "Universal Studios Japan", "description": "Parc d'attractions populaire", "latitude": 34.665415, "longitude": 135.432358 },
-      { "nom": "Umeda Sky Building", "description": "Gratte‑ciel avec observatoire", "latitude": 34.705386, "longitude": 135.489713 }
+      {
+        "nom": "Château d'Osaka",
+        "description": "Château historique emblématique",
+        "latitude": 34.687315,
+        "longitude": 135.526201
+      },
+      {
+        "nom": "Dotonbori",
+        "description": "Quartier animé de restaurants et néons",
+        "latitude": 34.668695,
+        "longitude": 135.501227
+      },
+      {
+        "nom": "Universal Studios Japan",
+        "description": "Parc d'attractions populaire",
+        "latitude": 34.665415,
+        "longitude": 135.432358
+      },
+      {
+        "nom": "Umeda Sky Building",
+        "description": "Gratte‑ciel avec observatoire",
+        "latitude": 34.705386,
+        "longitude": 135.489713
+      }
     ],
     "recettes": [
       {
         "nom": "Takoyaki",
         "description": "Boulettes de poulpe",
-        "ingredients": ["pâte à takoyaki", "poulpe", "oignon vert", "gingembre mariné", "sauce takoyaki", "katsuobushi"]
+        "ingredients": [
+          "pâte à takoyaki",
+          "poulpe",
+          "oignon vert",
+          "gingembre mariné",
+          "sauce takoyaki",
+          "katsuobushi"
+        ]
       },
       {
         "nom": "Okonomiyaki",
         "description": "Crêpe japonaise salée",
-        "ingredients": ["chou", "œufs", "farine", "oignon vert", "porc", "sauce okonomiyaki"]
+        "ingredients": [
+          "chou",
+          "œufs",
+          "farine",
+          "oignon vert",
+          "porc",
+          "sauce okonomiyaki"
+        ]
       },
       {
         "nom": "Kushikatsu",
         "description": "Brochettes panées frites",
-        "ingredients": ["viande/fruit de mer", "légumes", "farine", "œufs", "chapelure panko"]
+        "ingredients": [
+          "viande/fruit de mer",
+          "légumes",
+          "farine",
+          "œufs",
+          "chapelure panko"
+        ]
       }
     ]
   },
@@ -154,16 +317,43 @@
     "meilleure_saison": "Printemps",
     "climat": "Subtropical humide",
     "attractions": [
-      { "nom": "Mémorial de la Paix", "description": "Lieu de mémoire du bombardement atomique", "latitude": 34.395500, "longitude": 132.453413 },
-      { "nom": "Dôme de Genbaku", "description": "Vestige classé au patrimoine mondial", "latitude": 34.395450, "longitude": 132.453258 },
-      { "nom": "Miyajima", "description": "Île célèbre pour son torii flottant", "latitude": 34.299430, "longitude": 132.319380 },
-      { "nom": "Château d'Hiroshima", "description": "Château historique reconstruit", "latitude": 34.403350, "longitude": 132.464240 }
+      {
+        "nom": "Mémorial de la Paix",
+        "description": "Lieu de mémoire du bombardement atomique",
+        "latitude": 34.3955,
+        "longitude": 132.453413
+      },
+      {
+        "nom": "Dôme de Genbaku",
+        "description": "Vestige classé au patrimoine mondial",
+        "latitude": 34.39545,
+        "longitude": 132.453258
+      },
+      {
+        "nom": "Miyajima",
+        "description": "Île célèbre pour son torii flottant",
+        "latitude": 34.29943,
+        "longitude": 132.31938
+      },
+      {
+        "nom": "Château d'Hiroshima",
+        "description": "Château historique reconstruit",
+        "latitude": 34.40335,
+        "longitude": 132.46424
+      }
     ],
     "recettes": [
       {
         "nom": "Okonomiyaki d'Hiroshima",
         "description": "Version locale du plat emblématique",
-        "ingredients": ["chou", "œufs", "farine", "nouilles", "porc", "sauce okonomiyaki"]
+        "ingredients": [
+          "chou",
+          "œufs",
+          "farine",
+          "nouilles",
+          "porc",
+          "sauce okonomiyaki"
+        ]
       },
       {
         "nom": "Huîtres",

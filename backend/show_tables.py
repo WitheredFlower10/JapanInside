@@ -1,31 +1,38 @@
+"""Inspect and display tables and their data in the database."""
+
+from database import SessionLocal, engine
 from sqlalchemy import inspect, text
-from database import engine, SessionLocal
 
 
 def show_tables_and_data():
+    """Display all tables in the database and their contents.
+
+    Connects to the database, lists all tables, and prints each table's
+    columns and rows. Empty tables are indicated as '(vide)'.
+    """
     inspector = inspect(engine)
     tables = inspector.get_table_names()
 
-    print("\n📦 Tables dans la base :")
+    print("\n📦 Tables in the database:")
     for table in tables:
         print(f"- {table}")
 
     db = SessionLocal()
 
     for table in tables:
-        print(f"\n📊 Contenu de la table '{table}':")
+        print(f"\n📊 Contents of table '{table}':")
 
         result = db.execute(text(f"SELECT * FROM {table}"))
         rows = result.fetchall()
 
         if not rows:
-            print("  (vide)")
+            print("  (empty)")
             continue
 
-        # Colonnes
-        print("  Colonnes :", list(result.keys()))
+        # Columns
+        print("  Columns:", list(result.keys()))
 
-        # Lignes
+        # Rows
         for row in rows:
             print(" ", tuple(row))
 

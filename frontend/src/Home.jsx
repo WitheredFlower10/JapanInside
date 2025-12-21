@@ -35,133 +35,132 @@ const Home = () => {
         setVille({ nom, error: err.message });
       });
   }, []);
-useEffect(() => {
-  if (mapRef.current) return; 
+  useEffect(() => {
+    if (mapRef.current) return;
 
-  const map = L.map("map").setView([36.2048, 138.2529], 6);
-  mapRef.current = map;
+    const map = L.map("map").setView([36.2048, 138.2529], 6);
+    mapRef.current = map;
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap",
-    maxZoom: 12,
-    minZoom: 5,
-  }).addTo(map);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap",
+      maxZoom: 12,
+      minZoom: 5,
+    }).addTo(map);
 
-  map.setMaxBounds([[30, 128], [46, 146]]);
-  map.on("click", () => setVille(null));
+    map.setMaxBounds([
+      [30, 128],
+      [46, 146],
+    ]);
+    map.on("click", () => setVille(null));
 
-  (async () => {
-    const villesData = await getVilles(); 
-    const points = [];
+    (async () => {
+      const villesData = await getVilles();
+      const points = [];
 
-    villesData.forEach((v) => {
-      points.push([v.latitude, v.longitude]);
+      villesData.forEach((v) => {
+        points.push([v.latitude, v.longitude]);
 
-      const icon = L.icon({
-        iconUrl:
-          "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-        shadowUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-        iconSize: [30, 46],
-        iconAnchor: [15, 46],
-        popupAnchor: [0, -46],
+        const icon = L.icon({
+          iconUrl:
+            "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+          shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+          iconSize: [30, 46],
+          iconAnchor: [15, 46],
+          popupAnchor: [0, -46],
+        });
+
+        L.marker([v.latitude, v.longitude], { icon, title: v.nom })
+          .addTo(map)
+          .on("click", () => onVilleClick(v.nom));
       });
 
-      L.marker([v.latitude, v.longitude], { icon, title: v.nom })
-        .addTo(map)
-        .on("click", () => onVilleClick(v.nom));
-    });
+      if (points.length) {
+        L.polyline(points, {
+          color: "#667eea",
+          weight: 4,
+          opacity: 0.8,
+          dashArray: "10,10",
+          lineCap: "round",
+        }).addTo(map);
+      }
+    })();
+  }, [onVilleClick]);
+  const [specialitesJP, setSpecialitesJP] = useState([]);
 
-    if (points.length) {
-      L.polyline(points, {
-        color: "#667eea",
-        weight: 4,
-        opacity: 0.8,
-        dashArray: "10,10",
-        lineCap: "round",
-      }).addTo(map);
-    }
-  })();
-}, [onVilleClick]);
-const [specialitesJP, setSpecialitesJP] = useState([])
+  useEffect(() => {
+    const fetchSpecialites = async () => {
+      try {
+        const res = await fetch(
+          "https://www.themealdb.com/api/json/v1/1/filter.php?a=japanese",
+        );
+        const data = await res.json();
+        setSpecialitesJP(data.meals || []);
+      } catch (err) {
+        console.error("Erreur chargement spécialités :", err);
+      }
+    };
 
-useEffect(() => {
-  const fetchSpecialites = async () => {
-    try {
-      const res = await fetch(
-        "https://www.themealdb.com/api/json/v1/1/filter.php?a=japanese"
-      );
-      const data = await res.json();
-      setSpecialitesJP(data.meals || []);
-    } catch (err) {
-      console.error("Erreur chargement spécialités :", err);
-    }
-  };
-
-  fetchSpecialites();
-}, []);
+    fetchSpecialites();
+  }, []);
   return (
     <>
+      {showSpecialitesModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>Spécialités Japonaises</h3>
+              <span
+                className="close-btn"
+                onClick={() => setShowSpecialitesModal(false)}
+              >
+                ×
+              </span>
+            </div>
+            <ul className="specialites-list">
+              {specialitesJP.map((meal) => (
+                <li key={meal.idMeal}>
+                  <img
+                    src={meal.strMealThumb}
+                    alt={meal.strMeal}
+                    className="meal-thumb"
+                  />{" "}
+                  {meal.strMeal}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
 
-
-{showSpecialitesModal && (
-  <div className="modal-overlay">
-    <div className="modal">
-      <div className="modal-header">
-        <h3>Spécialités Japonaises</h3>
-        <span
-          className="close-btn"
-          onClick={() => setShowSpecialitesModal(false)}
-        >
-          ×
-        </span>
-      </div>
-      <ul className="specialites-list">
-        {specialitesJP.map((meal) => (
-          <li key={meal.idMeal}>
-            <img
-              src={meal.strMealThumb}
-              alt={meal.strMeal}
-              className="meal-thumb"
-            />{" "}
-            {meal.strMeal}
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-)}
-
-
-
-        <div style={{
-        position: "absolute",
-        top: 10,
-        right: 10
-      }}>
-
-
+      <div
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+        }}
+      >
         <button
-  className="specialites-btn"
-  onClick={() => setShowSpecialitesModal(true)}
->
-  Spécialités Japonaises
-</button>
+          className="specialites-btn"
+          onClick={() => setShowSpecialitesModal(true)}
+        >
+          Spécialités Japonaises
+        </button>
         <Link
-          to={'/admin'}
+          to={"/admin"}
           className="admin-btn"
           style={{
             position: "fixed",
-            top:"15px",
-            right:"25px",
-            zIndex:999,
+            top: "15px",
+            right: "25px",
+            zIndex: 999,
             background: "#667eea",
             color: "white",
             padding: "8px 12px",
             borderRadius: "6px",
             textDecoration: "none",
             fontWeight: "bold",
-            boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
+            boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
           }}
         >
           Administration
@@ -171,8 +170,6 @@ useEffect(() => {
         <h1>🇯🇵 Japan Inside - Itinéraire au Japon</h1>
         <p>{villes.map((v) => v.nom).join(" → ")}</p>
       </div>
-   
-  
 
       <div id="map" style={{ width: "100vw", height: "100vh" }}></div>
 
@@ -202,8 +199,8 @@ useEffect(() => {
                 </p>
                 <div className="info-grid">
                   <div className="info-item">
-                    <strong>📍 Coordonnées:</strong>{" "}
-                    {ville.latitude.toFixed(4)}°N, {ville.longitude.toFixed(4)}°E
+                    <strong>📍 Coordonnées:</strong> {ville.latitude.toFixed(4)}
+                    °N, {ville.longitude.toFixed(4)}°E
                   </div>
                   <div className="info-item">
                     <strong>🌤️ Climat:</strong> {ville.climat}
@@ -236,8 +233,12 @@ useEffect(() => {
                 >
                   Voir {ville.nom} sur Google Maps
                 </a>
-                <a className="action-btn" href={`/ville/${ville.nom.toLowerCase()}`}>
-                  <i className="fas fa-external-link-alt"></i> Voir la page complète
+                <a
+                  className="action-btn"
+                  href={`/ville/${ville.nom.toLowerCase()}`}
+                >
+                  <i className="fas fa-external-link-alt"></i> Voir la page
+                  complète
                 </a>
               </>
             )}

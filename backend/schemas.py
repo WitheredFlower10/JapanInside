@@ -1,8 +1,26 @@
+"""Pydantic schemas for Japan Inside API."""
+
+from typing import List, Optional
+
 from pydantic import BaseModel, ConfigDict
-from typing import List, Optional, Dict, Any
+
+# ---------- Base Models ----------
 
 
 class VilleBase(BaseModel):
+    """Define common fields for a city (Ville).
+
+    Attributes:
+        nom (str): Name of the city.
+        position (Optional[int]): Order in the itinerary.
+        description (Optional[str]): Description of the city.
+        latitude (Optional[float]): Latitude coordinate.
+        longitude (Optional[float]): Longitude coordinate.
+        population (Optional[int]): Population of the city.
+        meilleure_saison (Optional[str]): Best season to visit.
+        climat (Optional[str]): Climate description.
+    """
+
     nom: str
     position: Optional[int] = None
     description: Optional[str] = None
@@ -14,6 +32,16 @@ class VilleBase(BaseModel):
 
 
 class AttractionBase(BaseModel):
+    """Define common fields for an attraction.
+
+    Attributes:
+        nom (str): Name of the attraction.
+        description (Optional[str]): Description of the attraction.
+        longitude (Optional[float]): Longitude coordinate.
+        latitude (Optional[float]): Latitude coordinate.
+        ville_id (int): ID of the associated city.
+    """
+
     nom: str
     description: Optional[str] = None
     longitude: Optional[float] = None
@@ -22,85 +50,132 @@ class AttractionBase(BaseModel):
 
 
 class RecetteBase(BaseModel):
+    """Define common fields for a culinary recipe.
+
+    Attributes:
+        nom (str): Name of the recipe.
+        description (Optional[str]): Description of the recipe.
+        ingredients (Optional[str]): Ingredients of the recipe.
+    """
+
     nom: str
     description: Optional[str] = None
     ingredients: Optional[str] = None
 
 
+# ---------- Output Models ----------
+
+
 class Ville(VilleBase):
+    """Define Ville schema for output with ID.
+
+    Attributes:
+        id (int): Unique identifier of the city.
+    """
+
     id: int
     model_config = ConfigDict(from_attributes=True)
 
 
 class Attraction(AttractionBase):
+    """Define Attraction schema for output with ID.
+
+    Attributes:
+        id (int): Unique identifier of the attraction.
+    """
+
     id: int
     model_config = ConfigDict(from_attributes=True)
 
 
 class Recette(RecetteBase):
+    """Define Recette schema for output with ID.
+
+    Attributes:
+        id (int): Unique identifier of the recipe.
+    """
+
     id: int
     model_config = ConfigDict(from_attributes=True)
 
 
-class AttractionCreate(BaseModel):
-    nom: str
-    description: Optional[str] = None
-    longitude: Optional[float] = None
-    latitude: Optional[float] = None
+# ---------- Input Models ----------
 
 
-class RecetteCreate(BaseModel):
-    nom: str
-    description: Optional[str] = None
-    ingredients: Optional[str] = None
+class AttractionCreate(AttractionBase):
+    """Define Attraction creation schema."""
+
+    pass
 
 
-class VilleCreate(BaseModel):
-    nom: str
-    position: Optional[int] = None
-    description: Optional[str] = None
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
-    population: Optional[int] = None
-    meilleure_saison: Optional[str] = None
-    climat: Optional[str] = None
+class RecetteCreate(RecetteBase):
+    """Define Recette creation schema."""
+
+    pass
+
+
+class VilleCreate(VilleBase):
+    """Define Ville creation schema including nested attractions and recipes.
+
+    Attributes:
+        attractions (Optional[List[AttractionCreate]]): List of attractions.
+        recettes (Optional[List[RecetteCreate]]): List of recipes.
+    """
 
     attractions: Optional[List[AttractionCreate]] = []
     recettes: Optional[List[RecetteCreate]] = []
 
 
-class AttractionOut(BaseModel):
+# ---------- Output Models for Nested Relations ----------
+
+
+class AttractionOut(AttractionBase):
+    """Define Attraction output schema for nested relations.
+
+    Attributes:
+        id (int): Unique identifier of the attraction.
+    """
+
     id: int
-    nom: str
-    description: Optional[str]
-    longitude: Optional[float]
-    latitude: Optional[float]
     model_config = ConfigDict(from_attributes=True)
 
 
-class RecetteOut(BaseModel):
+class RecetteOut(RecetteBase):
+    """Define Recette output schema for nested relations.
+
+    Attributes:
+        id (int): Unique identifier of the recipe.
+    """
+
     id: int
-    nom: str
-    description: Optional[str]
-    ingredients: Optional[str]
     model_config = ConfigDict(from_attributes=True)
 
 
-class VilleOut(BaseModel):
+class VilleOut(VilleBase):
+    """Define Ville output schema including nested attractions and recipes.
+
+    Attributes:
+        id (int): Unique identifier of the city.
+        attractions (List[AttractionOut]): List of nested attractions.
+        recettes (List[RecetteOut]): List of nested recipes.
+    """
+
     id: int
-    nom: str
-    position: Optional[int]
-    description: Optional[str]
-    latitude: Optional[float]
-    longitude: Optional[float]
-    population: Optional[int]
-    meilleure_saison: Optional[str]
-    climat: Optional[str]
     attractions: List[AttractionOut] = []
     recettes: List[RecetteOut] = []
     model_config = ConfigDict(from_attributes=True)
 
 
+# ---------- Utility Models ----------
+
+
 class VilleOrder(BaseModel):
+    """Define schema to reorder cities in the itinerary.
+
+    Attributes:
+        id (int): ID of the city.
+        position (int): New position in the itinerary.
+    """
+
     id: int
     position: int
