@@ -9,6 +9,7 @@ ville_recette = Table(
     Column("recette_id", Integer, ForeignKey("recettes.id"), primary_key=True),
 )
 
+
 class Ville(Base):
     __tablename__ = "villes"
 
@@ -21,9 +22,10 @@ class Ville(Base):
     population = Column(Integer)
     meilleure_saison = Column(String(100))
     climat = Column(Text)
-   
-    
-    attractions = relationship("Attraction", back_populates="ville", cascade="all, delete")
+
+    attractions = relationship(
+        "Attraction", back_populates="ville", cascade="all, delete"
+    )
     recettes = relationship("Recette", secondary=ville_recette, back_populates="villes")
 
 

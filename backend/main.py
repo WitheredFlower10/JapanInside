@@ -9,21 +9,19 @@ from sqlalchemy.orm import joinedload
 from fastapi.staticfiles import StaticFiles
 import json
 
-import create_tables 
+import create_tables
 import insert_data
 from typing import List
+
 with open("villes.json", "r", encoding="utf-8") as f:
     villes_data = json.load(f)
-  
+
 itineraire = ["Tokyo", "Hakone", "Kyoto", "Nara", "Osaka", "Hiroshima", "Tokyo"]
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Japan Inside API")
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173"
-]
+origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,6 +30,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -39,16 +39,15 @@ def get_db():
     finally:
         db.close()
 
-@app.get('/api/hello')
+
+@app.get("/api/hello")
 def hello_world():
     return {"message": "Hello World"}
 
-@app.get('/')
+
+@app.get("/")
 def hello_world():
-    DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "sqlite:///:memory:"
-)
+    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///:memory:")
     print(DATABASE_URL)
     return {}, 200
 
@@ -58,15 +57,16 @@ async def get_all_villes(db: Session = Depends(get_db)):
     """Retourne toutes les villes disponibles"""
     return db.query(models.Ville).order_by(models.Ville.position).all()
 
+
 @app.get("/api/attractions", response_model=list[schemas.AttractionOut])
 async def get_all_attractions(db: Session = Depends(get_db)):
 
     return crud.get_attractions(db)
 
+
 @app.put("/api/villes/reorder")
 def reorder_villes(
-    new_order: list[schemas.VilleOrder] = Body(...),
-    db: Session = Depends(get_db)
+    new_order: list[schemas.VilleOrder] = Body(...), db: Session = Depends(get_db)
 ):
     for item in new_order:
         ville = db.query(models.Ville).filter(models.Ville.id == item.id).first()
@@ -75,10 +75,12 @@ def reorder_villes(
 
     db.commit()
     return {"message": "OK"}
-    
+
 
 @app.put("/api/villes/{id}", response_model=schemas.VilleOut)
-def update_ville(id: int, ville_data: schemas.VilleCreate, db: Session = Depends(get_db)):
+def update_ville(
+    id: int, ville_data: schemas.VilleCreate, db: Session = Depends(get_db)
+):
     # Récupérer la ville existante
     ville = db.query(models.Ville).filter(models.Ville.id == id).first()
     if not ville:
@@ -122,12 +124,8 @@ def update_ville(id: int, ville_data: schemas.VilleCreate, db: Session = Depends
     return ville
 
 
-
 @app.post("/api/villes", response_model=schemas.Ville)
-def create_ville(
-     ville: schemas.VilleCreate,       
-    db: Session = Depends(get_db) 
-):
+def create_ville(ville: schemas.VilleCreate, db: Session = Depends(get_db)):
     db_ville = models.Ville(
         nom=ville.nom,
         position=ville.position,
@@ -136,7 +134,7 @@ def create_ville(
         longitude=ville.longitude,
         population=ville.population,
         meilleure_saison=ville.meilleure_saison,
-        climat=ville.climat
+        climat=ville.climat,
     )
     db.add(db_ville)
     db.commit()
@@ -159,28 +157,36 @@ def create_ville(
 def setup():
     create_tables.execute()
     return {}, 200
+
+
 @app.post("/api/flushDB")
 def flush_db(db: Session = Depends(get_db)):
-   
+
     try:
-       
+
         Base.metadata.drop_all(bind=engine)
-       
+
         Base.metadata.create_all(bind=engine)
         return {}, 200
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur lors de la réinitialisation : {str(e)}")
-    
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de la réinitialisation : {str(e)}"
+        )
+
+
 @app.post("/api/insertDATA")
 def insert():
     insert_data.execute()
     return {}, 200
 
+
 @app.get("/api/villes/{nom_ville}", response_model=schemas.VilleOut)
 def get_ville(nom_ville: str, db: Session = Depends(get_db)):
     ville = (
         db.query(models.Ville)
-        .options(joinedload(models.Ville.attractions), joinedload(models.Ville.recettes))
+        .options(
+            joinedload(models.Ville.attractions), joinedload(models.Ville.recettes)
+        )
         .filter(models.Ville.nom.ilike(nom_ville))
         .first()
     )
@@ -188,14 +194,17 @@ def get_ville(nom_ville: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Ville '{nom_ville}' non trouvée")
     return ville
 
+
 @app.delete("/api/villes/{id}")
 def delete_ville(id: int, db: Session = Depends(get_db)):
     ville = db.query(models.Ville).filter(models.Ville.id == id).first()
     if not ville:
         raise HTTPException(status_code=404, detail="Ville non trouvée")
-    
+
     db.delete(ville)
     db.commit()
+
+
 @app.get("/api/itineraire")
 async def get_itineraire_complet():
     """Retourne l'itinéraire complet"""
@@ -203,15 +212,19 @@ async def get_itineraire_complet():
         "itineraire": itineraire,
         "etapes": [
             {
-                "ordre": i+1,
+                "ordre": i + 1,
                 "ville": ville,
-                "coords": [villes_data[ville]["latitude"], villes_data[ville]["longitude"]]
+                "coords": [
+                    villes_data[ville]["latitude"],
+                    villes_data[ville]["longitude"],
+                ],
             }
-            for i, ville in enumerate(itineraire[:-1])  
-        ]
+            for i, ville in enumerate(itineraire[:-1])
+        ],
     }
 
-@app.get('/api/hello')
+
+@app.get("/api/hello")
 def hello_world():
     return {"message": "Bienvenue sur Japan Inside API!"}
 
@@ -221,14 +234,16 @@ def read_recettes(db: Session = Depends(get_db)):
     """Retourne toutes les recettes"""
     return crud.get_recettes(db)
 
+
 @app.post("/api/recettes", response_model=schemas.Recette)
 def create_recette(recette: schemas.RecetteCreate, db: Session = Depends(get_db)):
     """Crée une nouvelle recette"""
     return crud.create_recette(db, recette)
 
+
 @app.get("/api/health", response_model=dict)
 async def health_check():
-  
+
     return {
         "status": "healthy",
         "service": "Japan Inside API",
@@ -244,13 +259,12 @@ async def health_check():
             "create_recette": "/api/recettes [POST]",
             "flush_db": "/api/flushDB [POST]",
             "setup_db": "/api/createDB [POST]",
-            "insert_data": "/api/insertDATA [POST]"
-        }
+            "insert_data": "/api/insertDATA [POST]",
+        },
     }
 
 
-    
-    
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

@@ -5,6 +5,7 @@ import models
 
 JSON_FILE = "villes.json"
 
+
 def execute():
     db: Session = SessionLocal()
 
@@ -22,7 +23,7 @@ def execute():
                 longitude=ville_data.get("longitude"),
                 population=ville_data.get("population"),
                 meilleure_saison=ville_data.get("meilleure_saison"),
-                climat=ville_data.get("climat")
+                climat=ville_data.get("climat"),
             )
             db.add(ville)
             db.flush()  # flush pour obtenir l'id de la ville
@@ -35,7 +36,7 @@ def execute():
                     description=attr_data.get("description"),
                     longitude=attr_data.get("longitude"),
                     latitude=attr_data.get("latitude"),
-                    ville_id=ville.id
+                    ville_id=ville.id,
                 )
                 db.add(attraction)
 
@@ -44,7 +45,7 @@ def execute():
                 recette = models.Recette(
                     nom=rec_data["nom"],
                     description=rec_data.get("description"),
-                    ingredients=rec_data.get("ingredients")
+                    ingredients=rec_data.get("ingredients"),
                 )
                 db.add(recette)
                 db.flush()

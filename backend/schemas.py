@@ -11,7 +11,7 @@ class VilleBase(BaseModel):
     population: Optional[int] = None
     meilleure_saison: Optional[str] = None
     climat: Optional[str] = None
- 
+
 
 class AttractionBase(BaseModel):
     nom: str
@@ -20,18 +20,22 @@ class AttractionBase(BaseModel):
     latitude: Optional[float] = None
     ville_id: int
 
+
 class RecetteBase(BaseModel):
     nom: str
     description: Optional[str] = None
     ingredients: Optional[str] = None
-    
+
+
 class Ville(VilleBase):
     id: int
     model_config = ConfigDict(from_attributes=True)
 
+
 class Attraction(AttractionBase):
     id: int
     model_config = ConfigDict(from_attributes=True)
+
 
 class Recette(RecetteBase):
     id: int
@@ -44,10 +48,12 @@ class AttractionCreate(BaseModel):
     longitude: Optional[float] = None
     latitude: Optional[float] = None
 
+
 class RecetteCreate(BaseModel):
     nom: str
     description: Optional[str] = None
     ingredients: Optional[str] = None
+
 
 class VilleCreate(BaseModel):
     nom: str
@@ -63,7 +69,6 @@ class VilleCreate(BaseModel):
     recettes: Optional[List[RecetteCreate]] = []
 
 
-
 class AttractionOut(BaseModel):
     id: int
     nom: str
@@ -72,12 +77,14 @@ class AttractionOut(BaseModel):
     latitude: Optional[float]
     model_config = ConfigDict(from_attributes=True)
 
+
 class RecetteOut(BaseModel):
     id: int
     nom: str
     description: Optional[str]
     ingredients: Optional[str]
     model_config = ConfigDict(from_attributes=True)
+
 
 class VilleOut(BaseModel):
     id: int
@@ -92,6 +99,7 @@ class VilleOut(BaseModel):
     attractions: List[AttractionOut] = []
     recettes: List[RecetteOut] = []
     model_config = ConfigDict(from_attributes=True)
+
 
 class VilleOrder(BaseModel):
     id: int
