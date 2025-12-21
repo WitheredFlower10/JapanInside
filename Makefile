@@ -29,3 +29,5 @@ all-purge:
 	@echo "Removing all networks..."
 	@networks=$$(docker network ls -q); if [ -n "$$networks" ]; then docker network rm $$networks; fi
 	@echo "All Docker resources have been purged."
+pre-commit:
+	pre-commit run --all-files --config .github/pre-commit.yml

@@ -5,6 +5,7 @@ Provides endpoints for villes, attractions, recettes, and database management.
 
 import json
 import os
+from typing import Optional
 
 import create_tables
 import crud
@@ -15,7 +16,6 @@ from database import Base, SessionLocal, engine
 from fastapi import Body, Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session, joinedload
-from types import Optional
 
 # Load villes data from JSON
 with open("villes.json", "r", encoding="utf-8") as f:
@@ -96,12 +96,12 @@ def reorder_villes(
 def update_ville(
     id: int, ville_data: schemas.VilleCreate, db: Session = Depends(get_db)
 ):
-    """Update an existing ville, including its attractions and recettes."""
-    ville = db.query(models.Ville).filter(models.Ville.id == id).first()
-    if not ville:
+    """Update an existing ville, including attractions and recettes."""
+    ville: Optional[models.Ville] = db.query(models.Ville).filter(models.Ville.id == id).first()
+    if ville is None:
         raise HTTPException(status_code=404, detail="Ville non trouvée")
 
-    # Update fields
+    # Update fields safely
     ville.nom = ville_data.nom
     ville.position = ville_data.position
     ville.description = ville_data.description
@@ -111,7 +111,7 @@ def update_ville(
     ville.meilleure_saison = ville_data.meilleure_saison
     ville.climat = ville_data.climat
 
-    # Remove old attractions and recettes
+    # Clear old relations
     for attr in list(ville.attractions):
         db.delete(attr)
     ville.attractions.clear()
@@ -122,12 +122,12 @@ def update_ville(
 
     db.commit()
 
-    # Add new attractions (only if not None)
+    # Add new attractions if they exist
     if ville_data.attractions:
         for attraction in ville_data.attractions:
             ville.attractions.append(models.Attraction(**attraction.dict()))
 
-    # Add new recettes (only if not None)
+    # Add new recettes if they exist
     if ville_data.recettes:
         for recette in ville_data.recettes:
             db_recette = models.Recette(**recette.dict())
