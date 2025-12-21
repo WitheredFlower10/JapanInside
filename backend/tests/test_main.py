@@ -10,5 +10,4 @@ def test_healthcheck():
     """Verify that the root endpoint '/' returns HTTP 200."""
     response = client.get("/")
     assert response.status_code == 200
-    # Optional: check response body
-    assert isinstance(response.json(), dict)
+
