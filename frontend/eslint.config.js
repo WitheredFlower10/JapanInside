@@ -26,4 +26,11 @@ export default defineConfig([
       "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
     },
   },
+  // Override pour Jest
+  {
+    files: ["**/*.test.js", "**/*.spec.js"],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.jest },
+    },
+  },
 ]);
