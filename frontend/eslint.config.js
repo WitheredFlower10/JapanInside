@@ -6,6 +6,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
   globalIgnores(["dist"]),
+
   {
     files: ["**/*.{js,jsx}"],
     extends: [
@@ -26,11 +27,13 @@ export default defineConfig([
       "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
     },
   },
-  // Override pour Jest
+
   {
     files: ["**/*.test.js", "**/*.spec.js"],
     languageOptions: {
-      globals: { ...globals.browser, ...globals.jest },
+      globals: { ...globals.jest, ...globals.node, ...globals.browser },
+    },
+    rules: {
     },
   },
 ]);
