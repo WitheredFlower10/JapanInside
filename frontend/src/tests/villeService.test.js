@@ -1,0 +1,85 @@
+// villes.test.js
+import {
+  getVilles,
+  createVille,
+  updateVille,
+  deleteVilleById,
+  reorderVilles,
+  flushAndInsertTemplate,
+} from '../Admin/services/villeService';
+
+global.fetch = jest.fn();
+
+beforeEach(() => {
+  fetch.mockClear();
+});
+
+describe('API villes', () => {
+  test('getVilles should fetch villes', async () => {
+    const mockData = [{ id: 1, name: 'Paris' }];
+    fetch.mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(mockData),
+    });
+
+    const result = await getVilles();
+
+    expect(fetch).toHaveBeenCalledWith('/api/villes');
+    expect(result).toEqual(mockData);
+  });
+
+  test('createVille should POST a ville', async () => {
+    const newVille = { name: 'Lyon' };
+    fetch.mockResolvedValueOnce({});
+
+    await createVille(newVille);
+
+    expect(fetch).toHaveBeenCalledWith('/api/villes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newVille),
+    });
+  });
+
+  test('updateVille should PUT a ville', async () => {
+    const updatedVille = { name: 'Marseille' };
+    fetch.mockResolvedValueOnce({});
+
+    await updateVille(1, updatedVille);
+
+    expect(fetch).toHaveBeenCalledWith('/api/villes/1', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedVille),
+    });
+  });
+
+  test('deleteVilleById should DELETE a ville', async () => {
+    fetch.mockResolvedValueOnce({});
+
+    await deleteVilleById(1);
+
+    expect(fetch).toHaveBeenCalledWith('/api/villes/1', { method: 'DELETE' });
+  });
+
+  test('reorderVilles should PUT the payload', async () => {
+    const payload = [{ id: 1, order: 2 }];
+    fetch.mockResolvedValueOnce({});
+
+    await reorderVilles(payload);
+
+    expect(fetch).toHaveBeenCalledWith('/api/villes/reorder', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  });
+
+  test('flushAndInsertTemplate should POST to flushDB and insertDATA', async () => {
+    fetch.mockResolvedValue({});
+
+    await flushAndInsertTemplate();
+
+    expect(fetch).toHaveBeenNthCalledWith(1, '/api/flushDB', { method: 'POST' });
+    expect(fetch).toHaveBeenNthCalledWith(2, '/api/insertDATA', { method: 'POST' });
+  });
+});
