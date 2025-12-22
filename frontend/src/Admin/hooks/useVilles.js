@@ -4,10 +4,10 @@ import * as villeService from "../services/villeService";
 
 export const useVilles = () => {
   const [villes, setVilles] = useState([]);
-
   const fetchVilles = async () => {
     try {
-      setVilles(await villeService.getVilles());
+      const data = await villeService.getVilles();
+      setVilles(data);
     } catch {
       toast.error("Erreur lors du chargement des villes");
     }
@@ -16,25 +16,29 @@ export const useVilles = () => {
   const deleteVille = async (id) => {
     if (!window.confirm("Supprimer cette ville ?")) return;
     await villeService.deleteVilleById(id);
-    setVilles(villes.filter(v => v.id !== id));
+    setVilles((prev) => prev.filter((v) => v.id !== id));
     toast.success("Ville supprimée !");
   };
 
   const moveVille = async (index, direction) => {
-    const newVilles = [...villes];
-    const target = index + direction;
-    if (target < 0 || target >= newVilles.length) return;
+    setVilles((prev) => {
+      const newVilles = [...prev];
+      const target = index + direction;
+      if (target < 0 || target >= newVilles.length) return prev;
 
-    [newVilles[index], newVilles[target]] = [newVilles[target], newVilles[index]];
-    await villeService.reorderVilles(
-      newVilles.map((v, i) => ({ id: v.id, position: i + 1 }))
-    );
-    setVilles(newVilles);
-    toast.success("Ordre mis à jour !");
+      [newVilles[index], newVilles[target]] = [newVilles[target], newVilles[index]];
+      villeService.reorderVilles(
+        newVilles.map((v, i) => ({ id: v.id, position: i + 1 }))
+      ).then(() => toast.success("Ordre mis à jour !"));
+      return newVilles;
+    });
   };
 
   useEffect(() => {
-    fetchVilles();
+    const fetchData = async () => {
+      await fetchVilles();
+    };
+    fetchData();
   }, []);
 
   return { villes, fetchVilles, deleteVille, moveVille };
