@@ -139,7 +139,12 @@ make restart
 ```
 
 ---
+## Images Docker
 
+```
+https://hub.docker.com/r/luucas71/japaninside-frontend
+https://hub.docker.com/r/luucas71/japaninside-backend
+```
 ## Pipeline CI
 
 Deux pipelines distincts sont utilisés pour le front-end et le back-end.
