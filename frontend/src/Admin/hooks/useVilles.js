@@ -27,8 +27,9 @@ export const useVilles = () => {
       if (target < 0 || target >= newVilles.length) return prev;
 
       [newVilles[index], newVilles[target]] = [newVilles[target], newVilles[index]];
+      console.log(newVilles.map((v, i) => ({ id: v.id, position: i + 1 })))
       villeService.reorderVilles(
-        newVilles.map((v, i) => ({ id: v.id, position: i + 1 }))
+        newVilles.map((v, i) => ({ id: Number(v.id),       position: Number(i + 1) }))
       ).then(() => toast.success("Ordre mis à jour !"));
       return newVilles;
     });

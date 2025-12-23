@@ -61,6 +61,7 @@ export default function Admin() {
 
       setModalMode(null);
       fetchVilles();
+     
       toast.success("Sauvegarde réussie !");
     } catch {
       toast.error("Erreur lors de la sauvegarde");
