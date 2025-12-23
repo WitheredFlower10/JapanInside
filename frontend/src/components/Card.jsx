@@ -90,7 +90,7 @@ const Card = ({ ville }) => {
                   style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}
                 >
                   {recette.ingredients
-                    .replace(/[{}]/g, "")
+                    ?.replace(/[{}]/g, "")
                     .split(",")
                     .map((ing, i) => (
                       <span

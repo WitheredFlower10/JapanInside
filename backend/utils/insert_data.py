@@ -6,7 +6,7 @@ import models
 from database import SessionLocal
 from sqlalchemy.orm import Session
 
-JSON_FILE = "villes.json"
+JSON_FILE = "data/villes.json"
 
 
 def execute() -> None:

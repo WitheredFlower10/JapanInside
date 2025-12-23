@@ -7,22 +7,23 @@ export const createVille = (ville) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(ville),
   });
-
-export const updateVille = (id, ville) =>{
-       console.log(ville)
-        fetch(`/api/villes/${id}`, {
+export const updateVille = (id, ville) => {
+  return fetch(`/api/villes/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(ville),
+  }).then(res => {
+    if (!res.ok) throw new Error("Erreur lors de la mise à jour");
+    return res.json(); // si ton API renvoie la ville mise à jour
   });
-}
+};
  
  
 
 export const deleteVilleById = (id) =>
   fetch(`/api/villes/${id}`, { method: "DELETE" });
 
-export const reorderVilles = (payload) =>
+export const reorderVilles = (payload) => 
   fetch("/api/villes/reorder", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

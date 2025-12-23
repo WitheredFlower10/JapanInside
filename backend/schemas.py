@@ -4,7 +4,6 @@ from typing import List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
-# ---------- Base Models ----------
 
 
 class VilleBase(BaseModel):
@@ -63,7 +62,6 @@ class RecetteBase(BaseModel):
     ingredients: Optional[str] = None
 
 
-# ---------- Output Models ----------
 
 
 class Ville(VilleBase):
@@ -99,8 +97,6 @@ class Recette(RecetteBase):
     model_config = ConfigDict(from_attributes=True)
 
 
-# ---------- Input Models ----------
-
 
 class AttractionCreate(AttractionBase):
     """Define Attraction creation schema."""
@@ -125,8 +121,6 @@ class VilleCreate(VilleBase):
     attractions: Optional[List[AttractionCreate]] = []
     recettes: Optional[List[RecetteCreate]] = []
 
-
-# ---------- Output Models for Nested Relations ----------
 
 
 class AttractionOut(AttractionBase):
@@ -165,8 +159,6 @@ class VilleOut(VilleBase):
     recettes: List[RecetteOut] = []
     model_config = ConfigDict(from_attributes=True)
 
-
-# ---------- Utility Models ----------
 
 
 class VilleOrder(BaseModel):
