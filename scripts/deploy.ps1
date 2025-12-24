@@ -1,52 +1,56 @@
-# Deploy JapanInside to Kubernetes
-# Usage: .\deploy.ps1
+Write-Host "========================================================" -ForegroundColor Cyan
+Write-Host "   Deploiement JapanInside" -ForegroundColor Cyan
+Write-Host "========================================================" -ForegroundColor Cyan
+Write-Host ""
 
-Write-Host ">> Deploying to Kubernetes..." -ForegroundColor Green
-
-# Check if kubectl is available
+# Verifier kubectl
 if (-not (Get-Command kubectl -ErrorAction SilentlyContinue)) {
-    Write-Host "[ERROR] kubectl not found. Please install it first." -ForegroundColor Red
-    Write-Host "Install with: choco install kubernetes-cli" -ForegroundColor Yellow
+    Write-Host "X kubectl non trouve" -ForegroundColor Red
+    Write-Host "  Installer avec: choco install kubernetes-cli" -ForegroundColor Yellow
     exit 1
 }
 
-# Deploy namespace and config
-Write-Host "`n[1/5] Deploying namespace and configuration..." -ForegroundColor Cyan
+# Verifier Minikube
+$minikubeStatus = minikube status --format='{{.Host}}' 2>$null
+if ($minikubeStatus -ne "Running") {
+    Write-Host "Minikube non demarre. Demarrage..." -ForegroundColor Yellow
+    minikube start
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "X Echec du demarrage de Minikube" -ForegroundColor Red
+        exit 1
+    }
+}
+
+Write-Host "[1/4] Deploiement du namespace..." -ForegroundColor Cyan
 kubectl apply -f k8s/config/
 
-# Deploy database
-Write-Host "`n[2/5] Deploying PostgreSQL..." -ForegroundColor Cyan
+Write-Host "`n[2/4] Deploiement de la base de donnees..." -ForegroundColor Cyan
 kubectl apply -f k8s/db/
 
-# Wait for PostgreSQL
-Write-Host "`n[WAIT] Waiting for PostgreSQL to be ready..." -ForegroundColor Yellow
+Write-Host "  Attente de PostgreSQL..." -ForegroundColor Yellow
 kubectl wait --namespace=japaninside --for=condition=ready pod -l app=postgres --timeout=180s
 
-# Deploy backend
-Write-Host "`n[3/5] Deploying Backend..." -ForegroundColor Cyan
+Write-Host "`n[3/4] Deploiement du backend - 3 replicas..." -ForegroundColor Cyan
 kubectl apply -f k8s/backend/
 
-# Deploy frontend
-Write-Host "`n[4/5] Deploying Frontend..." -ForegroundColor Cyan
+Write-Host "`n[4/4] Deploiement du frontend - 3 replicas..." -ForegroundColor Cyan
 kubectl apply -f k8s/frontend/
 
-# Wait for all pods
-Write-Host "`n[WAIT] Waiting for all pods to be ready..." -ForegroundColor Yellow
+Write-Host "`n  Attente que les pods soient prets..." -ForegroundColor Yellow
 kubectl wait --namespace=japaninside --for=condition=ready pod -l app=backend --timeout=120s
 kubectl wait --namespace=japaninside --for=condition=ready pod -l app=frontend --timeout=120s
 
-# Show status
-Write-Host "`n[SUCCESS] Deployment complete!" -ForegroundColor Green
-Write-Host "`n=== Pods ===" -ForegroundColor Cyan
+Write-Host "`nOK Deploiement termine!" -ForegroundColor Green
+Write-Host ""
 kubectl get pods -n japaninside
 
-Write-Host "`n=== Services ===" -ForegroundColor Cyan
-kubectl get svc -n japaninside
-
-Write-Host "`n=== Persistent Volume Claims ===" -ForegroundColor Cyan
-kubectl get pvc -n japaninside
-
-Write-Host "`n=== Access the application ===" -ForegroundColor Green
-Write-Host "  Frontend: minikube service frontend -n japaninside" -ForegroundColor White
-Write-Host "  Backend:  minikube service backend -n japaninside" -ForegroundColor White
-
+Write-Host "`n========================================================" -ForegroundColor Green
+Write-Host "   Etape Suivante" -ForegroundColor Green
+Write-Host "========================================================" -ForegroundColor Green
+Write-Host ""
+Write-Host "Ouvrir un NOUVEAU terminal et lancer:" -ForegroundColor Yellow
+Write-Host "  .\scripts\tunnel.ps1" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Puis verifier le statut avec:" -ForegroundColor Yellow
+Write-Host "  .\scripts\status.ps1" -ForegroundColor Cyan
+Write-Host ""
