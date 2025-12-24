@@ -38,64 +38,77 @@ tests:
 # Kubernetes / Minikube Deployment
 # ========================================
 
+# Deploiement avec Load Balancer
 deploy:
-	@echo "🚀 Deploying to Kubernetes..."
-	kubectl apply -f k8s/config/
-	kubectl apply -f k8s/db/
-	@echo "⏳ Waiting for PostgreSQL to be ready..."
-	kubectl wait --namespace=japaninside --for=condition=ready pod -l app=postgres --timeout=180s
-	kubectl apply -f k8s/backend/
-	kubectl apply -f k8s/frontend/
-	@echo "⏳ Waiting for all pods to be ready..."
-	kubectl wait --namespace=japaninside --for=condition=ready pod -l app=backend --timeout=120s
-	kubectl wait --namespace=japaninside --for=condition=ready pod -l app=frontend --timeout=120s
-	@echo "✅ Deployment complete!"
+	@bash scripts/bash/deploy.sh
+
+# Statut de l'application
+status:
+	@bash scripts/bash/status.sh
+
+# Tunnel LoadBalancer (doit rester ouvert)
+tunnel:
+	@bash scripts/bash/tunnel.sh
+
+# Logs
+logs-backend:
+	@bash scripts/bash/logs.sh backend
+
+logs-frontend:
+	@bash scripts/bash/logs.sh frontend
+
+logs-all:
+	@bash scripts/bash/logs.sh all
+
+# Nettoyage
+clean:
+	@bash scripts/bash/clean.sh
+
+# Redeploy
+redeploy: clean deploy
+
+# Endpoints et scaling
+endpoints:
+	@echo "📊 Service Endpoints:"
+	@kubectl get endpoints -n japaninside
+
+scale-up:
+	@echo "📈 Scaling up to 5 replicas..."
+	@kubectl scale deployment backend -n japaninside --replicas=5
+	@kubectl scale deployment frontend -n japaninside --replicas=5
+	@echo "✅ Scaled up!"
+	@kubectl get pods -n japaninside
+
+scale-down:
+	@echo "📉 Scaling down to 2 replicas..."
+	@kubectl scale deployment backend -n japaninside --replicas=2
+	@kubectl scale deployment frontend -n japaninside --replicas=2
+	@echo "✅ Scaled down!"
+	@kubectl get pods -n japaninside
+
+# Aide
+help:
+	@echo "📚 Commandes Disponibles:"
 	@echo ""
-	kubectl get pods -n japaninside
+	@echo "Deploiement:"
+	@echo "  make deploy        - Deploie l'application avec Load Balancer (3 replicas)"
+	@echo "  make tunnel        - Lance le tunnel Minikube (requis pour LoadBalancer)"
+	@echo "  make status        - Affiche l'etat et les URLs"
+	@echo "  make clean         - Supprime tous les deploiements"
+	@echo "  make redeploy      - Nettoie et redemarre"
 	@echo ""
-	kubectl get svc -n japaninside
-
-k8s-status:
-	@echo "📊 Kubernetes Status:"
-	kubectl get pods -n japaninside
-	kubectl get svc -n japaninside
-	kubectl get pvc -n japaninside
-
-k8s-logs-backend:
-	kubectl logs -n japaninside -l app=backend --tail=100 -f
-
-k8s-logs-frontend:
-	kubectl logs -n japaninside -l app=frontend --tail=100 -f
-
-k8s-logs-db:
-	kubectl logs -n japaninside -l app=postgres --tail=100 -f
-
-k8s-access-frontend:
-	@echo "🌐 Opening frontend service..."
-	minikube service frontend -n japaninside
-
-k8s-access-backend:
-	@echo "🌐 Opening backend service..."
-	minikube service backend -n japaninside
-
-k8s-clean:
-	@echo "🧹 Cleaning Kubernetes resources..."
-	kubectl delete -f k8s/frontend/ --ignore-not-found
-	kubectl delete -f k8s/backend/ --ignore-not-found
-	kubectl delete -f k8s/db/ --ignore-not-found
-	kubectl delete -f k8s/config/ --ignore-not-found
-	@echo "✅ Cleanup complete!"
-
-k8s-restart: k8s-clean k8s-deploy
-
-k8s-help:
-	@echo "📚 Kubernetes Commands:"
-	@echo "  make k8s-deploy          - Deploy application to Kubernetes"
-	@echo "  make k8s-status          - Show deployment status"
-	@echo "  make k8s-logs-backend    - Show backend logs"
-	@echo "  make k8s-logs-frontend   - Show frontend logs"
-	@echo "  make k8s-logs-db         - Show database logs"
-	@echo "  make k8s-access-frontend - Open frontend in browser"
-	@echo "  make k8s-access-backend  - Open backend in browser"
-	@echo "  make k8s-clean           - Remove all deployments"
-	@echo "  make k8s-restart         - Clean and redeploy"
+	@echo "Logs:"
+	@echo "  make logs-backend  - Affiche les logs du backend"
+	@echo "  make logs-frontend - Affiche les logs du frontend"
+	@echo "  make logs-all      - Affiche tous les logs"
+	@echo ""
+	@echo "Load Balancer:"
+	@echo "  make endpoints     - Affiche les endpoints (distribution)"
+	@echo "  make scale-up      - Scale a 5 replicas"
+	@echo "  make scale-down    - Scale a 2 replicas"
+	@echo ""
+	@echo "Docker:"
+	@echo "  make first-install - Build les images Docker"
+	@echo "  make start         - Demarre les containers"
+	@echo "  make stop          - Arrete les containers"
+	@echo "  make restart       - Redemarre les containers"

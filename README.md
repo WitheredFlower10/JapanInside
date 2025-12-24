@@ -98,7 +98,13 @@ JapanInside est une application full-stack pour organiser un voyage au Japon.
 │       ├── deployment.yaml
 │       └── service.yaml
 └── scripts
-    ├── deploy.ps1
+    ├── bash/              # Scripts bash (Linux/Mac)
+    │   ├── deploy.sh
+    │   ├── tunnel.sh
+    │   ├── status.sh
+    │   ├── logs.sh
+    │   └── clean.sh
+    ├── deploy.ps1         # Scripts PowerShell (Windows)
     ├── tunnel.ps1
     ├── status.ps1
     ├── logs.ps1
@@ -255,59 +261,185 @@ Les images sont automatiquement déployées sur un cluster Kubernetes local (Min
 
 ## Déploiement avec Minikube
 
-### Prérequis
+### Linux / Mac
 
-- **Minikube** 
+#### Prérequis
+
+- **Minikube**
 - **kubectl**
+- **make**
+
+#### Démarrage rapide avec Makefile
+
+Le Makefile simplifie toutes les commandes.
+
+**Terminal 1 : Déploiement**
+```bash
+make deploy
+```
+
+Ce qui va se passer :
+- Vérification et démarrage de Minikube si nécessaire
+- Déploiement du namespace `japaninside`
+- Déploiement de PostgreSQL (attente qu'il soit prêt)
+- Déploiement du backend (3 replicas)
+- Déploiement du frontend (3 replicas)
+- Attente que tous les pods soient prêts
+
+**Terminal 2 : Tunnel LoadBalancer** (dans un nouveau terminal)
+```bash
+make tunnel
+```
+
+- Ce terminal doit rester ouvert pendant toute la session !
+- Vous aurez besoin de `sudo`
+
+**Vérifier le statut** (retour au Terminal 1)
+```bash
+make status
+```
+
+Affiche les pods, services, et URLs d'accès !
+
+#### Commandes disponibles
+
+| Commande | Description |
+|----------|-------------|
+| `make deploy` | Déploie l'application complète avec LoadBalancer |
+| `make tunnel` | Lance le tunnel Minikube (requis, garder ouvert) |
+| `make status` | Affiche l'état des pods et les URLs d'accès |
+| `make logs-backend` | Logs en temps réel du backend |
+| `make logs-frontend` | Logs en temps réel du frontend |
+| `make logs-all` | Logs de tous les services |
+| `make endpoints` | Affiche les endpoints (distribution du trafic) |
+| `make scale-up` | Scale à 5 replicas (backend + frontend) |
+| `make scale-down` | Scale à 2 replicas |
+| `make clean` | Supprime tous les déploiements |
+| `make redeploy` | Nettoie et redéploie |
+| `make help` | Affiche toutes les commandes disponibles |
+
+#### Workflow complet
+
+```bash
+# Terminal 1
+make deploy
+make status
+
+# Terminal 2 (nouveau terminal, laisser ouvert)
+make tunnel
+
+# Terminal 1 (après quelques secondes)
+make status  # Voir les URLs avec IPs externes
+
+# Ouvrir dans le navigateur l'URL affichée !
+
+# Voir les logs en temps réel
+make logs-backend
+
+# Scaler selon les besoins
+make scale-up      # Plus de capacité
+make scale-down    # Économiser les ressources
+
+# Nettoyage
+make clean
+```
+
+---
+
+### 🪟 Windows
+
+#### Prérequis
+
+- **Minikube**
+- **kubectl** 
 - **PowerShell**
 
+#### Démarrage rapide avec PowerShell
 
-### Démarrage rapide
-
-Le déploiement se fait en 2 étapes :
-
-#### Terminal 1 : Déploiement
-
-Dans un terminal avec permissions Administrateur 
+**Terminal 1 : Déploiement** (PowerShell en Administrateur)
 
 ```powershell
 .\scripts\deploy.ps1
 ```
 
-#### Terminal 2 : Tunnel LoadBalancer
+Ce qui va se passer :
+- Vérification et démarrage de Minikube si nécessaire
+- Déploiement du namespace `japaninside`
+- Déploiement de PostgreSQL (attente qu'il soit prêt)
+- Déploiement du backend (3 replicas)
+- Déploiement du frontend (3 replicas)
+- Attente que tous les pods soient prêts
 
-Dans un nouveau terminal avec permissions Administrateur.
-Ce terminal doit rester ouvert pendant toute la durée d'utilisation de l'application !
+**Terminal 2 : Tunnel LoadBalancer** (nouveau PowerShell en Administrateur)
 
 ```powershell
 .\scripts\tunnel.ps1
 ```
 
-Ce script lance le tunnel Minikube nécessaire pour obtenir des IPs externes pour les services LoadBalancer.
+- Ce terminal doit rester ouvert pendant toute la session !
+- Nécessite les privilèges Administrateur
 
-#### Vérifier le déploiement
-
-Retour au Terminal 1 :
+**Vérifier le statut** (retour au Terminal 1)
 
 ```powershell
 .\scripts\status.ps1
 ```
 
-Affiche :
-- État de tous les pods
-- Services et leurs IPs externes
-- URLs d'accès à l'application
+Affiche les pods, services, et URLs d'accès.
 
-
-### Scripts disponibles
+#### Scripts disponibles
 
 | Script | Description |
 |--------|-------------|
-| `deploy.ps1` | Déploie l'application complète |
-| `tunnel.ps1` | Lance le tunnel LoadBalancer (requis) |
-| `status.ps1` | Affiche l'état et les URLs |
-| `logs.ps1` | Affiche les logs (backend/frontend/all) |
-| `clean.ps1` | Supprime tous les déploiements |
+| `.\scripts\deploy.ps1` | Déploie l'application complète |
+| `.\scripts\tunnel.ps1` | Lance le tunnel (requis, garder ouvert) |
+| `.\scripts\status.ps1` | Affiche l'état et les URLs |
+| `.\scripts\logs.ps1` | Logs backend (par défaut) |
+| `.\scripts\logs.ps1 frontend` | Logs frontend |
+| `.\scripts\logs.ps1 all` | Logs de tous les services |
+| `.\scripts\clean.ps1` | Supprime tous les déploiements |
+
+#### Scaling manuel (Windows)
+
+```powershell
+# Augmenter à 5 replicas
+kubectl scale deployment backend -n japaninside --replicas=5
+kubectl scale deployment frontend -n japaninside --replicas=5
+
+# Réduire à 2 replicas
+kubectl scale deployment backend -n japaninside --replicas=2
+kubectl scale deployment frontend -n japaninside --replicas=2
+
+# Vérifier
+kubectl get pods -n japaninside
+```
+
+#### Workflow complet
+
+```powershell
+# Terminal 1 (PowerShell Administrateur)
+.\scripts\deploy.ps1
+.\scripts\status.ps1
+
+# Terminal 2 (nouveau PowerShell Administrateur, laisser ouvert)
+.\scripts\tunnel.ps1
+
+# Terminal 1 (après quelques secondes)
+.\scripts\status.ps1  # Voir les URLs avec IPs externes
+
+# Ouvrir dans le navigateur l'URL affichée !
+
+# Voir les logs
+.\scripts\logs.ps1
+
+# Nettoyage
+.\scripts\clean.ps1
+```
+
+
+Ouvrir PowerShell avec "Exécuter en tant qu'administrateur"
+
+---
 
 ### Configuration LoadBalancer
 
