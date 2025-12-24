@@ -34,9 +34,6 @@ pre-commit:
 tests:
 	pytest backend/tests -v
 
-# ========================================
-# Kubernetes / Minikube Deployment
-# ========================================
 
 # Deploiement avec Load Balancer
 deploy:
