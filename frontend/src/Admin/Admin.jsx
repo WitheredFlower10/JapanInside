@@ -16,6 +16,11 @@ export default function Admin() {
   const [modalMode, setModalMode] = useState(null); // view | edit | add
   const [selectedVille, setSelectedVille] = useState(null);
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(true);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   const openModal = (mode, ville = null) => {
     setModalMode(mode);
     setSelectedVille(
@@ -24,6 +29,17 @@ export default function Admin() {
         : { nom: "", recettes: [], attractions: [] }
     );
   };
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            await loginAdmin(username, password);
+            setIsAuthenticated(true);
+            setLoginModalOpen(false);
+            toast.success("Connexion réussie !");
+        } catch (err) {
+            toast.error("Mot de passe incorrect");
+        }
+    };
 
   const handleSave = async () => {
     if (!selectedVille.nom?.trim()) {
@@ -67,8 +83,19 @@ export default function Admin() {
       toast.error("Erreur lors de la sauvegarde");
     }
   };
+    const loginAdmin = async (username, password) => {
+        const res = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "Authorization": "Basic " + btoa(`${username}:${password}`)
+            }
+        });
 
-  const importTemplate = async () => {
+        if (!res.ok) throw new Error("Mot de passe incorrect");
+        return res.json();
+    };
+
+    const importTemplate = async () => {
     const confirmFlush = window.confirm(
     "⚠️ Cette opération va réinitialiser la base de données et supprimer toutes vos données actuelles. Continuer ?"
   );
@@ -116,6 +143,38 @@ export default function Admin() {
           onSave={handleSave}
         />
       )}
+        if (!isAuthenticated) return (
+        <>
+            <ToastContainer />
+            {loginModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h2>Connexion Admin</h2>
+                        <form onSubmit={handleLogin} className="modal-fields">
+                            <input
+                                type="text"
+                                placeholder="Nom d'utilisateur"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="password"
+                                placeholder="Mot de passe"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <div className="modal-buttons">
+                                <button type="submit" className="add-btn">Se connecter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </>
+        );
+
     </div>
   );
 }

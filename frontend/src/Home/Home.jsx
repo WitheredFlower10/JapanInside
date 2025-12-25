@@ -10,10 +10,12 @@ const Home = () => {
   const [villes, setVilles] = useState([]);
   const [showSpecialitesModal, setShowSpecialitesModal] = useState(false);
   const [specialitesJP, setSpecialitesJP] = useState([]);
+  const [isAuthenticated] = useState(false);
 
- 
 
-  const onVilleClick = useCallback((nom) => {
+
+
+    const onVilleClick = useCallback((nom) => {
     if (!nom) return setVille(null);
 
     fetch(`/api/villes/${nom}`)
@@ -57,12 +59,12 @@ useEffect(() => {
 
       <div className="ui-overlay">
         <button className="specialites-btn" onClick={() => setShowSpecialitesModal(true)}>Spécialités Japonaises</button>
-    <Link
+          {isAuthenticated && (
+              <Link
           to={'/admin'}
-          className="admin-btn"
-        >
+          className="admin-btn">
           Administration
-        </Link>
+        </Link>)}
       </div>
 
       <div className="map-title">

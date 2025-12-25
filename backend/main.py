@@ -13,6 +13,7 @@ from routes import recettes
 from routes import attractions
 from routes import setup
 from routes import villes
+from routes import authentification
 
 import models
 
@@ -38,6 +39,7 @@ app.include_router(recettes.router, prefix="/api", tags=["Recettes"])
 app.include_router(attractions.router, prefix="/api", tags=["Attractions"])
 app.include_router(setup.router, prefix="/api", tags=["Setup"])
 app.include_router(villes.router, prefix="/api", tags=["Villes"])
+app.include_router(authentification.router, prefix="/api", tags=["Authentification"])
 
 
 

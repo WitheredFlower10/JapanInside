@@ -1,118 +1,344 @@
 .admin-container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+    min-height: 100vh;
+    padding: 30px;
+
+    font-family: "Inter", sans-serif;
+    color: #1F2A44;
 }
 
+
 .admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 25px 30px;
+    margin-bottom: 30px;
+
+    border: 2px solid #1F2A44;
+    border-radius: 8px;
+
+    box-shadow:
+            0 6px 0 #1F2A44,
+            0 12px 20px rgba(31, 42, 68, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+    position: relative;
+    overflow: hidden;
 }
 
 .add-btn {
-  background-color: #667eea;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 5px;
+    padding: 12px 22px;
+
+    font-family: "Shippori Mincho", serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    background: linear-gradient(to bottom, #C73E3A 0%, #B13632 100%);
+    color: #F9F7F2;
+
+    border: none;
+    border-radius: 6px;
+
+    box-shadow:
+            0 5px 0 #8E2B28,
+            0 10px 20px rgba(199, 62, 58, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
+.add-btn:hover {
+    transform: translateY(3px);
+    box-shadow:
+            0 2px 0 #8E2B28,
+            0 5px 10px rgba(199, 62, 58, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.add-btn:active {
+    transform: translateY(5px);
+    box-shadow: 0 0 0 #8E2B28;
+}
+
+
 .ville-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .ville-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background: white;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 18px 22px;
+    background: linear-gradient(rgba(235, 225, 205, 0.85), rgba(235, 225, 205, 0.85)),
+    url('https://images.unsplash.com/photo-1528164344705-47542687000d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #1F2A44;
+    border-radius: 8px;
+
+    box-shadow:
+            0 4px 0 #1F2A44,
+            0 6px 12px rgba(31, 42, 68, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+    transition: all 0.2s ease;
+
+    position: relative;
+    overflow: hidden;
 }
+
+.ville-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(31, 42, 68, 0.03), transparent);
+    transition: left 0.5s ease;
+}
+
+.ville-item:hover::before {
+    left: 100%;
+}
+
+.ville-item:hover {
+    transform: translateY(2px);
+    box-shadow:
+            0 2px 0 #1F2A44,
+            0 4px 8px rgba(31, 42, 68, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* =========================
+   PICTOS ACTIONS
+========================= */
 
 .ville-controls button,
 .ville-actions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-right: 5px;
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    border: 2px solid #1F2A44;
+    background: linear-gradient(to bottom, #F9F7F2 0%, #F5F3EC 100%);
+
+    font-size: 1.1rem;
+    line-height: 1;
+
+    box-shadow:
+            0 3px 0 #1F2A44,
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ville-controls button:hover,
+.ville-actions button:hover {
+    transform: scale(1.15) translateY(-1px);
+    box-shadow:
+            0 4px 0 #1F2A44,
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.fas .view-btn:hover {
+    background: linear-gradient(to bottom, #1F2A44 0%, #151E35 100%);
+    color: #F9F7F2;
+    transform: translateY(2px) scale(1);
+    box-shadow: 0 1px 0 #1F2A44;
+}
+
+.fas .edit-btn:hover {
+    background: linear-gradient(to bottom, #667085 0%, #5A6478 100%);
+    color: #F9F7F2;
+    transform: translateY(2px) scale(1);
+}
+
+.fas .delete-btn {
+    border-color: #C73E3A;
+    color: #C73E3A;
+    background: linear-gradient(to bottom, #F9F7F2 0%, #F5F3EC 100%);
+}
+
+.fas .delete-btn:hover {
+    background: linear-gradient(to bottom, #C73E3A 0%, #B13632 100%);
+    color: #F9F7F2;
+    transform: translateY(2px) scale(1);
+    border-color: #C73E3A;
 }
 
 .ville-name {
-  flex: 1;
+    flex: 1;
+
+    font-family: "Shippori Mincho", serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+
+    padding-left: 10px;
+    position: relative;
 }
 
+.ville-name::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, #C73E3A, #1F2A44);
+    border-radius: 2px;
+}
+
+
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(31, 42, 68, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    backdrop-filter: blur(4px);
 }
 
 .modal {
-  background-color: white;
-  padding: 20px;
-  width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 8px;
+    background: linear-gradient(to bottom, #F9F7F2 0%, #F5F3EC 100%);
+    padding: 30px;
+
+    width: 620px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    border: 2px solid #1F2A44;
+    border-radius: 10px;
+
+    box-shadow:
+            0 10px 0 #1F2A44,
+            0 25px 40px rgba(31, 42, 68, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+    position: relative;
 }
+
 
 .modal-fields input,
 .modal-fields textarea {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+
+    border-radius: 6px;
+    border: 1px solid #1F2A44;
+    background: rgba(255, 255, 255, 0.7);
+
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+
+    transition: all 0.2s ease;
+}
+
+.modal-fields input:focus,
+.modal-fields textarea:focus {
+    outline: none;
+    border-color: #C73E3A;
+    box-shadow: 0 0 0 2px rgba(199, 62, 58, 0.2);
+    background: white;
 }
 
 .modal-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(31, 42, 68, 0.1);
 }
 
 .modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px solid rgba(31, 42, 68, 0.1);
 }
 
 .delete-btn {
-  background-color: #f56565;
-  color: white;
-  border: none;
-  padding: 5px 8px;
-  border-radius: 5px;
-  cursor: pointer;
+    background: linear-gradient(to bottom, #C73E3A 0%, #B13632 100%);
+    color: #F9F7F2;
+
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+
+    font-family: "Shippori Mincho", serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+
+    box-shadow:
+            0 3px 0 #8E2B28,
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #8E2B28;
 }
 
 .action-button {
-  border: none;
-  color: white;
-  padding: 15px;
-  border-radius: 5px;
+    padding: 12px 24px;
+
+    font-family: "Shippori Mincho", serif;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    box-shadow:
+            0 3px 0 rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    transition: all 0.2s ease;
 }
+
 .action-button:hover {
-  cursor: pointer;
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 }
+
 .action-button:nth-child(1) {
-  background: rgb(184, 105, 105);
+    background: linear-gradient(to bottom, #8E2B28 0%, #7C2522 100%);
+    color: #F9F7F2;
 }
+
 .action-button:nth-child(2) {
-  background: rgb(97, 197, 97);
+    background: linear-gradient(to bottom, #1F2A44 0%, #151E35 100%);
+    color: #F9F7F2;
 }
