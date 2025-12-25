@@ -2,10 +2,16 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
+import japan from "../assets/japan.png"
 const Card = ({ ville }) => {
   const mapRef = useRef(null);
+useEffect(() => {
+    document.body.style.overflow = "scroll";
 
+    return () => {
+      document.body.style.overflow = "hidden";
+    };
+  }, []);
   useEffect(() => {
     if (!ville) return;
 
@@ -49,7 +55,10 @@ const Card = ({ ville }) => {
   return (
     <div className="container">
       <div className="header">
-        <h1>🇯🇵 {ville.nom}</h1>
+        <div className="flexer">
+    <img src={japan} className="japan-ico" />
+        <h1> {ville.nom}</h1>
+        </div>
         <p>{ville.description}</p>
       </div>
 

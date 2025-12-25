@@ -4,7 +4,7 @@ import Map from "./components/Map/Map.jsx";
 import VilleInfoPanel from "./components/VilleInfoPanel.jsx";
 import SpecialitesModal from "./components/SpecialitesModal.jsx";
 import "./home.css";
-
+import japan from "../assets/japan.png"
 const Home = () => {
   const [ville, setVille] = useState(null);
   const [villes, setVilles] = useState([]);
@@ -66,7 +66,10 @@ useEffect(() => {
       </div>
 
       <div className="map-title">
-        <h1>🇯🇵 Japan Inside - Itinéraire au Japon</h1>
+        <div className="flexer">
+        <img src={japan} className="japan-ico" />
+        <h1>Japan Inside - Itinéraire au Japon</h1>
+        </div>
         <p>{villes.map((v) => v.nom).join(" → ")}</p>
       </div>
     </>

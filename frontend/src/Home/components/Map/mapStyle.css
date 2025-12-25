@@ -14,7 +14,6 @@ body {
     background: #ECE8DF;
     font-family: "Inter", sans-serif;
     color: #1E1E1E;
-    overflow: hidden;
 }
 
 #map {
@@ -86,7 +85,7 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 3000;
+    z-index: 1000;
     display: flex;
     flex-direction: column;
     gap: 12px;

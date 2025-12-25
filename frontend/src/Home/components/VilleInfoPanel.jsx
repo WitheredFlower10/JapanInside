@@ -43,7 +43,8 @@ const VilleInfoPanel = ({ ville, onClose }) => {
               Voir {ville.nom} sur Google Maps
             </a>
             <a className="action-btn" href={`/ville/${ville.nom.toLowerCase()}`}>
-              <i className="fas fa-external-link-alt"></i> Voir la page complète
+              <i className="fas fa-external-link-alt"></i> 
+              <span>Voir la page complète</span>
             </a>
           </>
         )}

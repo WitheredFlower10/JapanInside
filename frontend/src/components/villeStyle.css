@@ -19,8 +19,8 @@ body {
     margin: auto;
     background: #FFFFFF;
     border-radius: 18px;
-    overflow: hidden;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+    
 }
 
 /* HEADER */
@@ -125,10 +125,11 @@ h2::after {
 .attraction-item {
     background: #FFFFFF;
     border-radius: 14px;
-    padding: 16px;
+    padding: 25px;
     margin-bottom: 14px;
     border-left: 4px solid #1F2A44;
     transition: all 0.25s ease;
+    
 }
 
 .attraction-item:hover {
@@ -181,4 +182,15 @@ h2::after {
     .header h1 {
         font-size: 2rem;
     }
+}
+.japan-ico {
+    width: 50px;
+    border-radius: 50px;
+}
+.flexer {
+    display:flex;
+    gap: 15px;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:15px;
 }

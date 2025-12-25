@@ -77,3 +77,16 @@
     color: #1F2A44;
     margin-bottom: 1rem;
 }
+
+
+.japan-ico {
+    width: 50px;
+    border-radius: 50px;
+}
+.flexer {
+    display:flex;
+    gap: 15px;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:15px;
+}

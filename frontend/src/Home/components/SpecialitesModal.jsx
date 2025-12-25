@@ -7,8 +7,8 @@ const SpecialitesModal = ({ show, onClose, specialites }) => {
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
-          <h3>Spécialités Japonaises</h3>
           <span className="close-btn" onClick={onClose}>×</span>
+          <h3>Spécialités Japonaises</h3>
         </div>
         <ul className="specialites-list">
           {specialites.map((meal) => (

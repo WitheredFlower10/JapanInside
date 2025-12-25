@@ -5,7 +5,13 @@ import "./mapStyle.css";
 
 const Map = ({ villes, onVilleClick }) => {
   const mapRef = useRef(null);
+useEffect(() => {
+    document.body.style.overflow = "hidden";
 
+    return () => {
+      document.body.style.overflow = "scroll";
+    };
+  }, []);
   useEffect(() => {
     if (mapRef.current) return;
 
