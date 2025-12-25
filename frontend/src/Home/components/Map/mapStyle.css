@@ -1,316 +1,114 @@
+/* =========================
+   RESET
+========================= */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+/* =========================
+   BASE
+========================= */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    sans-serif;
-  overflow: hidden;
+    background: #ECE8DF;
+    font-family: "Inter", sans-serif;
+    color: #1E1E1E;
+    overflow: hidden;
 }
 
 #map {
-  height: 100vh;
-  width: 100vw;
+    height: 100vh;
+    width: 100vw;
 }
 
-/* Panneau d'information */
-.info-panel {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  max-width: 350px;
-  max-height: 80vh;
-  overflow-y: auto;
-  animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-.info-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #667eea;
-}
-
-.close-btn {
-  cursor: pointer;
-  font-size: 24px;
-  color: #666;
-  transition: color 0.3s;
-}
-
-.close-btn:hover {
-  color: #ff4444;
-}
-
-.ville-details {
-  line-height: 1.6;
-}
-
-.ville-details h3 {
-  color: #2c3e50;
-  margin-bottom: 10px;
-  font-size: 1.5rem;
-}
-
-.ville-details p {
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.attractions-list {
-  margin: 15px 0;
-  padding-left: 20px;
-}
-
-.attractions-list li {
-  margin-bottom: 5px;
-  color: #444;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin: 15px 0;
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-.info-item {
-  font-size: 0.9rem;
-}
-
-.info-item strong {
-  color: #333;
-  display: block;
-  margin-bottom: 3px;
-}
-
-.action-btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-  transition:
-    transform 0.3s,
-    box-shadow 0.3s;
-}
-
-.action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-/* Légende */
-.legende {
-  position: absolute;
-  bottom: 30px;
-  left: 20px;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-  font-size: 13px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.legende h4 {
-  margin-bottom: 10px;
-  color: #2c3e50;
-  font-size: 14px;
-}
-
-.legende-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  color: #444;
-}
-
-.color-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: 2px solid white;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-}
-
-/* Titre */
+/* =========================
+   TITRE CARTE (SCEAU)
+========================= */
 .map-title {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 15px 30px;
-  border-radius: 10px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+
+    background: #1F2A44;
+    color: #F9F7F2;
+    padding: 14px 34px;
+
+    font-family: "Shippori Mincho", serif;
+    letter-spacing: 2px;
+
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
 }
 
 .map-title h1 {
-  color: #2c3e50;
-  font-size: 1.2rem;
-  margin-bottom: 5px;
+    font-size: 1.1rem;
 }
 
 .map-title p {
-  color: #666;
-  font-size: 0.9rem;
+    font-size: 0.75rem;
+    opacity: 0.85;
 }
 
-/* Popups personnalisés */
+/* =========================
+   LEGENDE (ESTAMPE)
+========================= */
+.legende {
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    z-index: 1000;
+
+    background: #F9F7F2;
+    padding: 18px;
+    border: 2px solid #1F2A44;
+
+    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
+}
+
+.legende h4 {
+    font-family: "Shippori Mincho", serif;
+    margin-bottom: 10px;
+}
+
+.legende-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+}
+
+/* =========================
+   UI OVERLAY (Boutons overlay)
+========================= */
+.ui-overlay {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* =========================
+   POPUPS LEAFLET
+========================= */
 .leaflet-popup-content {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-.custom-popup {
-  text-align: center;
+    font-family: "Inter", sans-serif;
 }
 
 .popup-title {
-  color: #2c3e50;
-  font-weight: bold;
-  margin-bottom: 5px;
+    font-family: "Shippori Mincho", serif;
+    font-size: 1rem;
+    color: #1F2A44;
 }
-
 .popup-etape {
-  background: #667eea;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  display: inline-block;
-  margin-top: 5px;
-}
+    display: inline-block;
+    margin-top: 6px;
+    padding: 4px 10px;
 
-/* Responsive */
-@media (max-width: 768px) {
-  .info-panel {
-    max-width: 90%;
-    right: 5%;
-    left: 5%;
-  }
-
-  .legende {
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    font-size: 12px;
-  }
-
-  .map-title {
-    width: 90%;
-    padding: 10px;
-    top: 10px;
-  }
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  max-height: 80vh;
-  overflow-y: auto;
-  width: 400px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.close-btn {
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.specialites-list {
-  list-style: none;
-  padding-left: 0;
-}
-
-.specialites-list li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.meal-thumb {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.specialites-btn {
-  margin-top: 10px;
-  background-color: #667eea;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  position: fixed;
-  top: 50px;
-  right: 10px;
-  z-index: 999;
-}
-
-.specialites-btn:hover {
-  background-color: #5563c1;
+    background: #C73E3A;
+    color: #F9F7F2;
 }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Map from "./components/Map/Map.jsx";
 import VilleInfoPanel from "./components/VilleInfoPanel.jsx";
 import SpecialitesModal from "./components/SpecialitesModal.jsx";
+import "./home.css";
 
 const Home = () => {
   const [ville, setVille] = useState(null);
@@ -54,24 +55,11 @@ useEffect(() => {
       <Map villes={villes} onVilleClick={onVilleClick} />
       <VilleInfoPanel ville={ville} onClose={() => setVille(null)} />
 
-      <div style={{ position: "absolute", top: 10, right: 10, display: "flex", flexDirection: "column", gap: "10px" }}>
+      <div className="ui-overlay">
         <button className="specialites-btn" onClick={() => setShowSpecialitesModal(true)}>Spécialités Japonaises</button>
     <Link
           to={'/admin'}
           className="admin-btn"
-          style={{
-            position: "fixed",
-            top:"15px",
-            right:"25px",
-            zIndex:999,
-            background: "#667eea",
-            color: "white",
-            padding: "8px 12px",
-            borderRadius: "6px",
-            textDecoration: "none",
-            fontWeight: "bold",
-            boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
-          }}
         >
           Administration
         </Link>

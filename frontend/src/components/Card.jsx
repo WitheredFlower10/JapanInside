@@ -14,8 +14,12 @@ const Card = ({ ville }) => {
       center: [ville.latitude, ville.longitude],
       zoom: 12,
     });
+        const toriiIcon = L.icon({
+          iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+          iconSize: [50, 50],
+      });
 
-    // Ajouter les tuiles OSM
+      // Ajouter les tuiles OSM
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap",
       maxZoom: 19,
@@ -24,7 +28,7 @@ const Card = ({ ville }) => {
     // Ajouter un marqueur pour chaque attraction
     ville.attractions.forEach((attraction) => {
       if (attraction.latitude && attraction.longitude) {
-        L.marker([attraction.latitude, attraction.longitude])
+        L.marker([attraction.latitude, attraction.longitude], {icon : toriiIcon})
           .addTo(map)
           .bindPopup(`<b>${attraction.nom}</b><br>${attraction.description}`);
       }
@@ -149,3 +153,4 @@ const Card = ({ ville }) => {
 };
 
 export default Card;
+
