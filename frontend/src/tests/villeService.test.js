@@ -25,9 +25,7 @@ global.fetch = jest.fn();
 
 beforeEach(async () => {
   localStorage.clear();
-
   localStorage.setItem('access_token',"FAKE_JWT_TOKEN");
-  console.log(localStorage.getItem("access_token"))
   fetch.mockClear();
 });
 
@@ -77,7 +75,7 @@ describe('API villes', () => {
 
     await deleteVilleById(1);
 
-    expect(fetch).toHaveBeenCalledWith('/api/villes/1', { method: 'DELETE' });
+    expect(fetch).toHaveBeenCalledWith('/api/villes/1', { method: 'DELETE', headers: {'Authorization': expect.any(String)} });
   });
 
   test('reorderVilles should PUT the payload', async () => {
