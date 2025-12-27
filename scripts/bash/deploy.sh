@@ -18,7 +18,7 @@ fi
 MINIKUBE_STATUS=$(minikube status --format='{{.Host}}' 2>/dev/null)
 if [ "$MINIKUBE_STATUS" != "Running" ]; then
     echo "Minikube non demarre. Demarrage..."
-    minikube start
+    minikube start --driver=docker
     if [ $? -ne 0 ]; then
         echo "X Echec du demarrage de Minikube"
         exit 1

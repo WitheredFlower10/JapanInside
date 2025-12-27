@@ -20,10 +20,6 @@ spec:
           ports:
             - containerPort: 5173
           env:
-            # Pour le Dockerfile dev (Vite proxy)
-            - name: VITE_BACKEND_URL
-              value: http://backend:8000
-            # Pour le Dockerfile.prod (Nginx proxy)
             - name: BACKEND_URL
               value: http://backend:8000
 
