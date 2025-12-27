@@ -22,3 +22,4 @@ async def health_check():
             "insert_data": "/api/insertDATA [POST]",
         },
     }
+
