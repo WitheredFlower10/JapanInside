@@ -16,7 +16,7 @@ export const updateVille = (id, ville) => {
     body: JSON.stringify(ville),
   }).then(res => {
   //  if (!res.ok) throw new Error("Erreur lors de la mise à jour");
-    return res.json();
+    return res?.json();
   });
 };
  
