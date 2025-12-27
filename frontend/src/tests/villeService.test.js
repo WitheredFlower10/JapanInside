@@ -8,11 +8,29 @@ import {
   flushAndInsertTemplate,
 } from '../Admin/services/villeService';
 
+
+global.localStorage = (() => {
+  let store = {};
+
+  return {
+    getItem: (key) => store[key] || null,
+    setItem: (key, value) => { store[key] = value.toString(); },
+    removeItem: (key) => { delete store[key]; },
+    clear: () => { store = {}; },
+  };
+})();
+
 global.fetch = jest.fn();
 
+
 beforeEach(() => {
+  localStorage.clear();
+  localStorage.setItem("access_token", "test");
   fetch.mockClear();
 });
+
+
+
 
 describe('API villes', () => {
   test('getVilles should fetch villes', async () => {
