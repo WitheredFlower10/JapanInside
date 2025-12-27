@@ -20,6 +20,6 @@ spec:
           ports:
             - containerPort: 5173
           env:
-            - name: VITE_API_URL
+            - name: BACKEND_URL
               value: http://backend:8000
 
